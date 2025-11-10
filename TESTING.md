@@ -16,7 +16,11 @@ bash quickstart.sh
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+# Установите зависимости под сценарий тестирования
+pip install -r requirements-benchmarks.txt      # CLI-бенчмарки
+pip install -r requirements.txt                 # Streamlit UI и UI-тесты
+# альтернативный файл со Streamlit-зависимостями
+# pip install -r requirements-streamlit.txt
 cp .env.example .env
 # Отредактируйте .env и добавьте ваш OPENAI_API_KEY
 ```
@@ -185,8 +189,11 @@ which python
 # Если нет, активируйте
 source venv/bin/activate
 
-# Переустановите зависимости
+# Переустановите Streamlit-зависимости
 pip install -r requirements.txt --force-reinstall
+
+# Для CLI-бенчмарков
+# pip install -r requirements-benchmarks.txt --force-reinstall
 ```
 
 ### Неточные ответы
@@ -290,7 +297,8 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-benchmarks.txt
+      # Для UI-тестов добавьте: pip install -r requirements.txt
       - run: python main.py --dataset iris
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
