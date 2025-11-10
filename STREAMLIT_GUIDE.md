@@ -207,7 +207,7 @@ Dashboard reads from `results/` directory:
 ```
 streamlit>=1.39
 plotly>=5.18
-pandas>=2.2.3
+pandas==2.1.4
 ```
 
 Install: `pip install --user streamlit plotly`
@@ -225,17 +225,19 @@ streamlit_app.py
 
 ## 🚨 Troubleshooting
 
-### Issue: Installation fails on Streamlit Cloud (Python 3.13)
+### Issue: Installation fails on Streamlit Cloud (default Python 3.13)
 
 **Symptom:** The build log shows `_PyLong_AsByteArray` compilation errors while
 trying to install `pandas==2.1.4`.
 
 **Solution:**
-1. Pull the latest repository version — `requirements.txt` now requires
-   `pandas>=2.2.3`, the first release with official Python 3.13 wheels.
-2. Re-deploy or rerun `pip install -r requirements.txt`.
-3. If the cache still uses old pins, clear the environment (Streamlit Cloud:
-   `Settings → Advanced settings → Clear cache`) and redeploy.
+1. Pull the latest repository version — the new `runtime.txt` file pins the
+   app to Python 3.12, which provides pre-built wheels for `pandas==2.1.4`.
+2. Redeploy (Streamlit Cloud: `Settings → Advanced settings → Clear cache` →
+   `Deploy`), or rerun `pip install -r requirements.txt` locally with Python
+   3.12.
+3. If you must stay on Python 3.13, override the pandas pin with
+   `pip install "pandas>=2.2.3"` after deployment to pick up the newer wheels.
 
 ### Issue: No results found
 
