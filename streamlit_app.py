@@ -860,7 +860,11 @@ def show_framework_comparison(df_rule: pd.DataFrame, df_llm: pd.DataFrame):
         'Errors': rule_comp[('errors', 'sum')].values
     })
     
-    st.dataframe(combined_display.sort_values('🤖 LLM Accuracy', ascending=False), hide_index=True, width="stretch")
+    st.dataframe(
+        combined_display.sort_values('🤖 LLM Accuracy', ascending=False),
+        hide_index=True,
+        use_container_width=True
+    )
     
     st.markdown("---")
     
