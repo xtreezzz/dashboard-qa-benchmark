@@ -36,6 +36,8 @@ pip install -q --upgrade pip
 pip install -q -r requirements.txt
 echo "✓ Dependencies installed"
 echo ""
+echo "ℹ️  Примечание: requirements.txt устанавливает Streamlit UI; для CLI используйте requirements-benchmarks.txt"
+echo ""
 
 # Create .env if it doesn't exist
 if [ ! -f ".env" ]; then

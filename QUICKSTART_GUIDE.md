@@ -29,7 +29,14 @@ python3 -m venv venv
 source venv/bin/activate
 
 # 2. Зависимости
+# Только CLI-бенчмарки
+pip install -r requirements-benchmarks.txt
+
+# Только Streamlit-дэшборд
 pip install -r requirements.txt
+
+# Альтернатива: тот же набор зависимостей отдельным файлом
+# pip install -r requirements-streamlit.txt
 
 # 3. API ключ
 cp .env.example .env
@@ -116,7 +123,9 @@ dashboard-qa-benchmark/
 ├── main.py                      # Основной скрипт
 ├── example_usage.py             # Примеры программного использования
 ├── quickstart.sh                # Скрипт быстрой установки
-├── requirements.txt             # Зависимости Python
+├── requirements-benchmarks.txt  # Зависимости для CLI-бенчмарков
+├── requirements-streamlit.txt   # Зависимости для дэшборда
+├── requirements.txt             # Основные зависимости Streamlit (та же подборка)
 ├── .env.example                 # Шаблон для API ключей
 ├── README.md                    # Полная документация
 ├── TESTING.md                   # Руководство по тестированию
@@ -209,8 +218,11 @@ python main.py --dataset iris
 # Убедиться что venv активен
 source venv/bin/activate
 
-# Переустановить
+# Переустановить Streamlit-зависимости
 pip install -r requirements.txt --force-reinstall
+
+# Для CLI-бенчмарков
+# pip install -r requirements-benchmarks.txt --force-reinstall
 ```
 
 ## 📚 Документация
