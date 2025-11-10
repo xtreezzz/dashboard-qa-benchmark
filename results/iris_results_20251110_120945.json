@@ -1,0 +1,556 @@
+{
+  "metadata": {
+    "dataset_name": "iris",
+    "timestamp": "20251110_120945",
+    "total_questions": 5,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "How many rows are in the dataset?",
+      "benchmark": {
+        "question": "How many rows are in the dataset?",
+        "answer": "150",
+        "reasoning": "The Iris dataset contains 150 samples"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "150",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:07:07.949349] Starting PandasAI query\nQuestion: How many rows are in the dataset?\nDataFrame shape: (150, 6)\n================================================================================\n2025-11-10 12:07:07 [INFO] Question: How many rows are in the dataset?\n2025-11-10 12:07:08 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 12:07:08 [INFO] Prompt ID: f5c243c1-b220-4f40-8ba8-a545abaf1a78\n2025-11-10 12:07:08 [INFO] Generating new code...\n2025-11-10 12:07:08 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_fc290b46daf770f801d66b05aa1ad98f\" columns=\"[{\"name\": \"sepal length (cm)\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"sepal width (cm)\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"petal length (cm)\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"petal width (cm)\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"species\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"species_name\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"150x6\">\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n How many rows are in the dataset?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 12:07:16 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Use SQL to count rows in the provided table\nsql_query = \"\"\"\nSELECT COUNT(*) AS row_count\nFROM table_fc290b46daf770f801d66b05aa1ad98f\n\"\"\"\n\n# Execute the query\ndf_count = execute_sql_query(sql_query)\n\n# Extract the count as an integer\nrow_count = int(df_count.loc[0, \"row_count\"])\n\n# Declare result var\nresult = { \"type\": \"number\", \"value\": row_count }\n2025-11-10 12:07:16 [INFO] Validating code requirements...\n2025-11-10 12:07:16 [INFO] Code validation successful.\n2025-11-10 12:07:16 [INFO] Cleaning the generated code...\n2025-11-10 12:07:16 [INFO] Executing code: import pandas as pd\nsql_query = \"\"\"\nSELECT COUNT(*) AS row_count\nFROM table_fc290b46daf770f801d66b05aa1ad98f\n\"\"\"\ndf_count = execute_sql_query(sql_query)\nrow_count = int(df_count.loc[0, 'row_count'])\nresult = {'type': 'number', 'value': row_count}\n2025-11-10 12:07:16 [INFO] Response generated successfully.\n\nAnswer: 150\n[2025-11-10T12:07:16.308300] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "150",
+            "framework_answer": "150",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many rows are in the dataset?\n\nExpected Answer: 150\nActual Answer: 150\n\nReasoning: The Iris dataset contains 150 samples\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nexpected_answer = \"\"\"150\"\"\"\nactual_answer = \"\"\"150\"\"\"\nreasoning = \"\"\"The Iris dataset contains 150 samples\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "150",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:07:16.308772] Starting Real Sketch query\nQuestion: How many rows are in the dataset?\nDataFrame shape: (150, 6)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n150\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 150\n[2025-11-10T12:07:19.963782] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "150",
+            "framework_answer": "150",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many rows are in the dataset?\n\nExpected Answer: 150\nActual Answer: 150\n\nReasoning: The Iris dataset contains 150 samples\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nexpected_answer = \"\"\"150\"\"\"\nactual_answer = \"\"\"150\"\"\"\nreasoning = \"\"\"The Iris dataset contains 150 samples\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 150 rows in the dataset.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:07:19.968481] Starting LangChain query\nQuestion: How many rows are in the dataset?\nDataFrame shape: (150, 6)\nColumns: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)', 'species', 'species_name']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: There are 150 rows in the dataset.\n[2025-11-10T12:07:25.245123] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "150",
+            "framework_answer": "There are 150 rows in the dataset.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Both answers indicate 150 rows; the Actual Answer expresses it as a sentence but conveys the same numeric value, with only minor formatting difference"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many rows are in the dataset?\n\nExpected Answer: 150\nActual Answer: There are 150 rows in the dataset.\n\nReasoning: The Iris dataset contains 150 samples\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both answers indicate 150 rows; the Actual Answer expresses it as a sentence but conveys the same numeric value, with only minor formatting difference|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Both answers indicate 150 rows; the Actual Answer expresses it as a sentence but conveys the same numeric value, with only minor formatting difference"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many rows are in the dataset?\"\"\"\nexpected_answer = \"\"\"150\"\"\"\nactual_answer = \"\"\"There are 150 rows in the dataset.\"\"\"\nreasoning = \"\"\"The Iris dataset contains 150 samples\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the average sepal length?",
+      "benchmark": {
+        "question": "What is the average sepal length?",
+        "answer": "5.843",
+        "reasoning": "Mean of sepal length (cm) column rounded to 3 decimals"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "5.843333333333335",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:07:30.884932] Starting PandasAI query\nQuestion: What is the average sepal length?\nDataFrame shape: (150, 6)\n================================================================================\n\nAnswer: 5.843333333333335\n[2025-11-10T12:07:38.665939] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average sepal length?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "5.843",
+            "framework_answer": "5.843333333333335",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.95,
+              "explanation": "Numerical match: 5.843 \u2248 5.843333333333335"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average sepal length?\n\nExpected Answer: 5.843\nActual Answer: 5.843333333333335\n\nReasoning: Mean of sepal length (cm) column rounded to 3 decimals\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Numerical match (pre-LLM): 5.843 \u2248 5.843333333333335",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.95,
+                "explanation": "Numerical match: 5.843 \u2248 5.843333333333335"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average sepal length?\"\"\"\nexpected_answer = \"\"\"5.843\"\"\"\nactual_answer = \"\"\"5.843333333333335\"\"\"\nreasoning = \"\"\"Mean of sepal length (cm) column rounded to 3 decimals\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "5.843333333333334",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:07:38.666329] Starting Real Sketch query\nQuestion: What is the average sepal length?\nDataFrame shape: (150, 6)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n5.843333333333334\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 5.843333333333334\n[2025-11-10T12:07:43.837471] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average sepal length?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "5.843",
+            "framework_answer": "5.843333333333334",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.95,
+              "explanation": "Numerical match: 5.843 \u2248 5.843333333333334"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average sepal length?\n\nExpected Answer: 5.843\nActual Answer: 5.843333333333334\n\nReasoning: Mean of sepal length (cm) column rounded to 3 decimals\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Numerical match (pre-LLM): 5.843 \u2248 5.843333333333334",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.95,
+                "explanation": "Numerical match: 5.843 \u2248 5.843333333333334"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average sepal length?\"\"\"\nexpected_answer = \"\"\"5.843\"\"\"\nactual_answer = \"\"\"5.843333333333334\"\"\"\nreasoning = \"\"\"Mean of sepal length (cm) column rounded to 3 decimals\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average sepal length is 5.843333333333334 cm (about 5.84 cm).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:07:43.837993] Starting LangChain query\nQuestion: What is the average sepal length?\nDataFrame shape: (150, 6)\nColumns: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)', 'species', 'species_name']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The average sepal length is 5.843333333333334 cm (about 5.84 cm).\n[2025-11-10T12:07:55.751110] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average sepal length?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "5.843",
+            "framework_answer": "The average sepal length is 5.843333333333334 cm (about 5.84 cm).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Actual value is the precise mean 5.843333333333334 cm; rounding to three decimals yields 5.843, matching the expected 5.843. It adds units and an approximate 5.84 cm, but semantically equivalent."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average sepal length?\n\nExpected Answer: 5.843\nActual Answer: The average sepal length is 5.843333333333334 cm (about 5.84 cm).\n\nReasoning: Mean of sepal length (cm) column rounded to 3 decimals\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Actual value is the precise mean 5.843333333333334 cm; rounding to three decimals yields 5.843, matching the expected 5.843. It adds units and an approximate 5.84 cm, but semantically equivalent.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Actual value is the precise mean 5.843333333333334 cm; rounding to three decimals yields 5.843, matching the expected 5.843. It adds units and an approximate 5.84 cm, but semantically equivalent."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average sepal length?\"\"\"\nexpected_answer = \"\"\"5.843\"\"\"\nactual_answer = \"\"\"The average sepal length is 5.843333333333334 cm (about 5.84 cm).\"\"\"\nreasoning = \"\"\"Mean of sepal length (cm) column rounded to 3 decimals\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the maximum petal width?",
+      "benchmark": {
+        "question": "What is the maximum petal width?",
+        "answer": "2.5",
+        "reasoning": "Maximum value in petal width (cm) column"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "2.5",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:08:02.568984] Starting PandasAI query\nQuestion: What is the maximum petal width?\nDataFrame shape: (150, 6)\n================================================================================\n\nAnswer: 2.5\n[2025-11-10T12:08:10.030413] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.5",
+            "framework_answer": "2.5",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum petal width?\n\nExpected Answer: 2.5\nActual Answer: 2.5\n\nReasoning: Maximum value in petal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nexpected_answer = \"\"\"2.5\"\"\"\nactual_answer = \"\"\"2.5\"\"\"\nreasoning = \"\"\"Maximum value in petal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "2.5",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:08:10.031026] Starting Real Sketch query\nQuestion: What is the maximum petal width?\nDataFrame shape: (150, 6)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n2.5\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 2.5\n[2025-11-10T12:08:16.838821] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.5",
+            "framework_answer": "2.5",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum petal width?\n\nExpected Answer: 2.5\nActual Answer: 2.5\n\nReasoning: Maximum value in petal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nexpected_answer = \"\"\"2.5\"\"\"\nactual_answer = \"\"\"2.5\"\"\"\nreasoning = \"\"\"Maximum value in petal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The maximum petal width is 2.5 (column: \"petal width (cm)\").",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:08:16.839494] Starting LangChain query\nQuestion: What is the maximum petal width?\nDataFrame shape: (150, 6)\nColumns: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)', 'species', 'species_name']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The maximum petal width is 2.5 (column: \"petal width (cm)\").\n[2025-11-10T12:08:35.028958] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.5",
+            "framework_answer": "The maximum petal width is 2.5 (column: \"petal width (cm)\").",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states the maximum petal width as 2.5 (including the column context), which matches the expected value exactly. Formatting adds context but does not change the meaning."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum petal width?\n\nExpected Answer: 2.5\nActual Answer: The maximum petal width is 2.5 (column: \"petal width (cm)\").\n\nReasoning: Maximum value in petal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states the maximum petal width as 2.5 (including the column context), which matches the expected value exactly. Formatting adds context but does not change the meaning.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states the maximum petal width as 2.5 (including the column context), which matches the expected value exactly. Formatting adds context but does not change the meaning."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum petal width?\"\"\"\nexpected_answer = \"\"\"2.5\"\"\"\nactual_answer = \"\"\"The maximum petal width is 2.5 (column: \"petal width (cm)\").\"\"\"\nreasoning = \"\"\"Maximum value in petal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many species are in the dataset?",
+      "benchmark": {
+        "question": "How many species are in the dataset?",
+        "answer": "3",
+        "reasoning": "Three species: setosa, versicolor, and virginica"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "3",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:08:40.154986] Starting PandasAI query\nQuestion: How many species are in the dataset?\nDataFrame shape: (150, 6)\n================================================================================\n\nAnswer: 3\n[2025-11-10T12:08:46.812346] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "3",
+            "framework_answer": "3",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many species are in the dataset?\n\nExpected Answer: 3\nActual Answer: 3\n\nReasoning: Three species: setosa, versicolor, and virginica\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nexpected_answer = \"\"\"3\"\"\"\nactual_answer = \"\"\"3\"\"\"\nreasoning = \"\"\"Three species: setosa, versicolor, and virginica\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "3 (setosa, versicolor, virginica)",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:08:46.812757] Starting Real Sketch query\nQuestion: How many species are in the dataset?\nDataFrame shape: (150, 6)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '3 (setosa, versicolor, virginica)'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 3 (setosa, versicolor, virginica)\n[2025-11-10T12:08:53.767880] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "3",
+            "framework_answer": "3 (setosa, versicolor, virginica)",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states 3 and even lists the three species (setosa, versicolor, virginica); this matches the expected count of 3. Extra details do not change the numeric answer."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many species are in the dataset?\n\nExpected Answer: 3\nActual Answer: 3 (setosa, versicolor, virginica)\n\nReasoning: Three species: setosa, versicolor, and virginica\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states 3 and even lists the three species (setosa, versicolor, virginica); this matches the expected count of 3. Extra details do not change the numeric answer.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states 3 and even lists the three species (setosa, versicolor, virginica); this matches the expected count of 3. Extra details do not change the numeric answer."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nexpected_answer = \"\"\"3\"\"\"\nactual_answer = \"\"\"3 (setosa, versicolor, virginica)\"\"\"\nreasoning = \"\"\"Three species: setosa, versicolor, and virginica\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 3 species in the dataset.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:08:53.769331] Starting LangChain query\nQuestion: How many species are in the dataset?\nDataFrame shape: (150, 6)\nColumns: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)', 'species', 'species_name']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: There are 3 species in the dataset.\n[2025-11-10T12:08:59.288071] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "3",
+            "framework_answer": "There are 3 species in the dataset.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.95,
+              "explanation": "The actual answer states there are 3 species, which matches the expected answer of 3. The sentence form is semantically equivalent to the numeric value; formatting differences do not change the meaning."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many species are in the dataset?\n\nExpected Answer: 3\nActual Answer: There are 3 species in the dataset.\n\nReasoning: Three species: setosa, versicolor, and virginica\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states there are 3 species, which matches the expected answer of 3. The sentence form is semantically equivalent to the numeric value; formatting differences do not change the meaning.|0.95",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.95,
+                "explanation": "The actual answer states there are 3 species, which matches the expected answer of 3. The sentence form is semantically equivalent to the numeric value; formatting differences do not change the meaning."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many species are in the dataset?\"\"\"\nexpected_answer = \"\"\"3\"\"\"\nactual_answer = \"\"\"There are 3 species in the dataset.\"\"\"\nreasoning = \"\"\"Three species: setosa, versicolor, and virginica\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the minimum sepal width?",
+      "benchmark": {
+        "question": "What is the minimum sepal width?",
+        "answer": "2.0",
+        "reasoning": "Minimum value in sepal width (cm) column"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "2.0",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:09:12.346223] Starting PandasAI query\nQuestion: What is the minimum sepal width?\nDataFrame shape: (150, 6)\n================================================================================\n\nAnswer: 2.0\n[2025-11-10T12:09:22.272657] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.0",
+            "framework_answer": "2.0",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the minimum sepal width?\n\nExpected Answer: 2.0\nActual Answer: 2.0\n\nReasoning: Minimum value in sepal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nexpected_answer = \"\"\"2.0\"\"\"\nactual_answer = \"\"\"2.0\"\"\"\nreasoning = \"\"\"Minimum value in sepal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "The minimum sepal width is 2.0 cm.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:09:22.273107] Starting Real Sketch query\nQuestion: What is the minimum sepal width?\nDataFrame shape: (150, 6)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'The minimum sepal width is 2.0 cm.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: The minimum sepal width is 2.0 cm.\n[2025-11-10T12:09:26.173845] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.0",
+            "framework_answer": "The minimum sepal width is 2.0 cm.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.9,
+              "explanation": "The actual answer conveys the same numeric value (2.0) as the expected answer; it adds a unit and natural-language phrasing, but the meaning is the same."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the minimum sepal width?\n\nExpected Answer: 2.0\nActual Answer: The minimum sepal width is 2.0 cm.\n\nReasoning: Minimum value in sepal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer conveys the same numeric value (2.0) as the expected answer; it adds a unit and natural-language phrasing, but the meaning is the same.|0.90",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.9,
+                "explanation": "The actual answer conveys the same numeric value (2.0) as the expected answer; it adds a unit and natural-language phrasing, but the meaning is the same."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nexpected_answer = \"\"\"2.0\"\"\"\nactual_answer = \"\"\"The minimum sepal width is 2.0 cm.\"\"\"\nreasoning = \"\"\"Minimum value in sepal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The minimum sepal width is 2.0.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:09:26.175122] Starting LangChain query\nQuestion: What is the minimum sepal width?\nDataFrame shape: (150, 6)\nColumns: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)', 'species', 'species_name']\n================================================================================\n\nAgent created, executing query...\n(150, 6)\nIndex(['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)',\n       'petal width (cm)', 'species', 'species_name'],\n      dtype='object')\n   sepal length (cm)  sepal width (cm)  ...  species  species_name\n0                5.1               3.5  ...        0        setosa\n1                4.9               3.0  ...        0        setosa\n2                4.7               3.2  ...        0        setosa\n3                4.6               3.1  ...        0        setosa\n4                5.0               3.6  ...        0        setosa\n\n[5 rows x 6 columns]\n\nAnswer: The minimum sepal width is 2.0.\n[2025-11-10T12:09:36.573928] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "2.0",
+            "framework_answer": "The minimum sepal width is 2.0.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states the minimum sepal width is 2.0, matching the expected numeric value; formatting as a sentence is semantically equivalent"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the minimum sepal width?\n\nExpected Answer: 2.0\nActual Answer: The minimum sepal width is 2.0.\n\nReasoning: Minimum value in sepal width (cm) column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states the minimum sepal width is 2.0, matching the expected numeric value; formatting as a sentence is semantically equivalent|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states the minimum sepal width is 2.0, matching the expected numeric value; formatting as a sentence is semantically equivalent"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the minimum sepal width?\"\"\"\nexpected_answer = \"\"\"2.0\"\"\"\nactual_answer = \"\"\"The minimum sepal width is 2.0.\"\"\"\nreasoning = \"\"\"Minimum value in sepal width (cm) column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "sepal length (cm),sepal width (cm),petal length (cm),petal width (cm),species,species_name\n5.1,3.5,1.4,0.2,0,setosa\n4.9,3.0,1.4,0.2,0,setosa\n4.7,3.2,1.3,0.2,0,setosa\n4.6,3.1,1.5,0.2,0,setosa\n5.0,3.6,1.4,0.2,0,setosa\n5.4,3.9,1.7,0.4,0,setosa\n4.6,3.4,1.4,0.3,0,setosa\n5.0,3.4,1.5,0.2,0,setosa\n4.4,2.9,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.1,0,setosa\n5.4,3.7,1.5,0.2,0,setosa\n4.8,3.4,1.6,0.2,0,setosa\n4.8,3.0,1.4,0.1,0,setosa\n4.3,3.0,1.1,0.1,0,setosa\n5.8,4.0,1.2,0.2,0,setosa\n5.7,4.4,1.5,0.4,0,setosa\n5.4,3.9,1.3,0.4,0,setosa\n5.1,3.5,1.4,0.3,0,setosa\n5.7,3.8,1.7,0.3,0,setosa\n5.1,3.8,1.5,0.3,0,setosa\n5.4,3.4,1.7,0.2,0,setosa\n5.1,3.7,1.5,0.4,0,setosa\n4.6,3.6,1.0,0.2,0,setosa\n5.1,3.3,1.7,0.5,0,setosa\n4.8,3.4,1.9,0.2,0,setosa\n5.0,3.0,1.6,0.2,0,setosa\n5.0,3.4,1.6,0.4,0,setosa\n5.2,3.5,1.5,0.2,0,setosa\n5.2,3.4,1.4,0.2,0,setosa\n4.7,3.2,1.6,0.2,0,setosa\n4.8,3.1,1.6,0.2,0,setosa\n5.4,3.4,1.5,0.4,0,setosa\n5.2,4.1,1.5,0.1,0,setosa\n5.5,4.2,1.4,0.2,0,setosa\n4.9,3.1,1.5,0.2,0,setosa\n5.0,3.2,1.2,0.2,0,setosa\n5.5,3.5,1.3,0.2,0,setosa\n4.9,3.6,1.4,0.1,0,setosa\n4.4,3.0,1.3,0.2,0,setosa\n5.1,3.4,1.5,0.2,0,setosa\n5.0,3.5,1.3,0.3,0,setosa\n4.5,2.3,1.3,0.3,0,setosa\n4.4,3.2,1.3,0.2,0,setosa\n5.0,3.5,1.6,0.6,0,setosa\n5.1,3.8,1.9,0.4,0,setosa\n4.8,3.0,1.4,0.3,0,setosa\n5.1,3.8,1.6,0.2,0,setosa\n4.6,3.2,1.4,0.2,0,setosa\n5.3,3.7,1.5,0.2,0,setosa\n5.0,3.3,1.4,0.2,0,setosa\n7.0,3.2,4.7,1.4,1,versicolor\n6.4,3.2,4.5,1.5,1,versicolor\n6.9,3.1,4.9,1.5,1,versicolor\n5.5,2.3,4.0,1.3,1,versicolor\n6.5,2.8,4.6,1.5,1,versicolor\n5.7,2.8,4.5,1.3,1,versicolor\n6.3,3.3,4.7,1.6,1,versicolor\n4.9,2.4,3.3,1.0,1,versicolor\n6.6,2.9,4.6,1.3,1,versicolor\n5.2,2.7,3.9,1.4,1,versicolor\n5.0,2.0,3.5,1.0,1,versicolor\n5.9,3.0,4.2,1.5,1,versicolor\n6.0,2.2,4.0,1.0,1,versicolor\n6.1,2.9,4.7,1.4,1,versicolor\n5.6,2.9,3.6,1.3,1,versicolor\n6.7,3.1,4.4,1.4,1,versicolor\n5.6,3.0,4.5,1.5,1,versicolor\n5.8,2.7,4.1,1.0,1,versicolor\n6.2,2.2,4.5,1.5,1,versicolor\n5.6,2.5,3.9,1.1,1,versicolor\n5.9,3.2,4.8,1.8,1,versicolor\n6.1,2.8,4.0,1.3,1,versicolor\n6.3,2.5,4.9,1.5,1,versicolor\n6.1,2.8,4.7,1.2,1,versicolor\n6.4,2.9,4.3,1.3,1,versicolor\n6.6,3.0,4.4,1.4,1,versicolor\n6.8,2.8,4.8,1.4,1,versicolor\n6.7,3.0,5.0,1.7,1,versicolor\n6.0,2.9,4.5,1.5,1,versicolor\n5.7,2.6,3.5,1.0,1,versicolor\n5.5,2.4,3.8,1.1,1,versicolor\n5.5,2.4,3.7,1.0,1,versicolor\n5.8,2.7,3.9,1.2,1,versicolor\n6.0,2.7,5.1,1.6,1,versicolor\n5.4,3.0,4.5,1.5,1,versicolor\n6.0,3.4,4.5,1.6,1,versicolor\n6.7,3.1,4.7,1.5,1,versicolor\n6.3,2.3,4.4,1.3,1,versicolor\n5.6,3.0,4.1,1.3,1,versicolor\n5.5,2.5,4.0,1.3,1,versicolor\n5.5,2.6,4.4,1.2,1,versicolor\n6.1,3.0,4.6,1.4,1,versicolor\n5.8,2.6,4.0,1.2,1,versicolor\n5.0,2.3,3.3,1.0,1,versicolor\n5.6,2.7,4.2,1.3,1,versicolor\n5.7,3.0,4.2,1.2,1,versicolor\n5.7,2.9,4.2,1.3,1,versicolor\n6.2,2.9,4.3,1.3,1,versicolor\n5.1,2.5,3.0,1.1,1,versicolor\n5.7,2.8,4.1,1.3,1,versicolor\n6.3,3.3,6.0,2.5,2,virginica\n5.8,2.7,5.1,1.9,2,virginica\n7.1,3.0,5.9,2.1,2,virginica\n6.3,2.9,5.6,1.8,2,virginica\n6.5,3.0,5.8,2.2,2,virginica\n7.6,3.0,6.6,2.1,2,virginica\n4.9,2.5,4.5,1.7,2,virginica\n7.3,2.9,6.3,1.8,2,virginica\n6.7,2.5,5.8,1.8,2,virginica\n7.2,3.6,6.1,2.5,2,virginica\n6.5,3.2,5.1,2.0,2,virginica\n6.4,2.7,5.3,1.9,2,virginica\n6.8,3.0,5.5,2.1,2,virginica\n5.7,2.5,5.0,2.0,2,virginica\n5.8,2.8,5.1,2.4,2,virginica\n6.4,3.2,5.3,2.3,2,virginica\n6.5,3.0,5.5,1.8,2,virginica\n7.7,3.8,6.7,2.2,2,virginica\n7.7,2.6,6.9,2.3,2,virginica\n6.0,2.2,5.0,1.5,2,virginica\n6.9,3.2,5.7,2.3,2,virginica\n5.6,2.8,4.9,2.0,2,virginica\n7.7,2.8,6.7,2.0,2,virginica\n6.3,2.7,4.9,1.8,2,virginica\n6.7,3.3,5.7,2.1,2,virginica\n7.2,3.2,6.0,1.8,2,virginica\n6.2,2.8,4.8,1.8,2,virginica\n6.1,3.0,4.9,1.8,2,virginica\n6.4,2.8,5.6,2.1,2,virginica\n7.2,3.0,5.8,1.6,2,virginica\n7.4,2.8,6.1,1.9,2,virginica\n7.9,3.8,6.4,2.0,2,virginica\n6.4,2.8,5.6,2.2,2,virginica\n6.3,2.8,5.1,1.5,2,virginica\n6.1,2.6,5.6,1.4,2,virginica\n7.7,3.0,6.1,2.3,2,virginica\n6.3,3.4,5.6,2.4,2,virginica\n6.4,3.1,5.5,1.8,2,virginica\n6.0,3.0,4.8,1.8,2,virginica\n6.9,3.1,5.4,2.1,2,virginica\n6.7,3.1,5.6,2.4,2,virginica\n6.9,3.1,5.1,2.3,2,virginica\n5.8,2.7,5.1,1.9,2,virginica\n6.8,3.2,5.9,2.3,2,virginica\n6.7,3.3,5.7,2.5,2,virginica\n6.7,3.0,5.2,2.3,2,virginica\n6.3,2.5,5.0,1.9,2,virginica\n6.5,3.0,5.2,2.0,2,virginica\n6.2,3.4,5.4,2.3,2,virginica\n5.9,3.0,5.1,1.8,2,virginica\n"
+}

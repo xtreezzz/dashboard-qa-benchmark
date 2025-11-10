@@ -215,7 +215,7 @@ class RealSketchWrapper:
             # Replace backend before importing sketch
             backends.OpenAICompletion = CompletionToChatWrapper
             
-            # Now import sketch with our custom backend
+            # Now  with our custom backend
             import sketch
             
             self.sketch = sketch

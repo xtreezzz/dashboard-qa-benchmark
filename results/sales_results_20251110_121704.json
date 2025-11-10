@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "dataset_name": "sales",
+    "timestamp": "20251110_121704",
+    "total_questions": 4,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "What is the total revenue?",
+      "benchmark": {
+        "question": "What is the total revenue?",
+        "answer": "196000",
+        "reasoning": "Sum of all revenue values"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "196000",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:14:04.798877] Starting PandasAI query\nQuestion: What is the total revenue?\nDataFrame shape: (12, 4)\n================================================================================\n2025-11-10 12:14:04 [INFO] Question: What is the total revenue?\n2025-11-10 12:14:04 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 12:14:04 [INFO] Prompt ID: 8ba3c72f-1248-421b-889e-bd2cf0a191db\n2025-11-10 12:14:04 [INFO] Generating new code...\n2025-11-10 12:14:04 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_15b415fff1baab876355f990b86b316e\" columns=\"[{\"name\": \"date\", \"type\": \"datetime\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"revenue\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"customers\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"region\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"12x4\">\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n What is the total revenue?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 12:14:13 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Use provided function execute_sql_query to run an aggregation in SQL\nsql = \"\"\"\nSELECT\n  SUM(revenue) AS total_revenue\nFROM\n  table_15b415fff1baab876355f990b86b316e\n\"\"\"\ndf_total = execute_sql_query(sql)\n\n# Extract the total revenue value (handle potential nulls)\nif df_total.empty or df_total['total_revenue'].isnull().all():\n    total_revenue = 0\nelse:\n    # Convert to int if possible, otherwise keep as float\n    total_val = df_total['total_revenue'].iloc[0]\n    try:\n        total_revenue = int(total_val)\n    except (TypeError, ValueError):\n        total_revenue = float(total_val)\n\n# Declare result var:\nresult = { \"type\": \"number\", \"value\": total_revenue }\n2025-11-10 12:14:13 [INFO] Validating code requirements...\n2025-11-10 12:14:13 [INFO] Code validation successful.\n2025-11-10 12:14:13 [INFO] Cleaning the generated code...\n2025-11-10 12:14:13 [INFO] Executing code: import pandas as pd\nsql = \"\"\"\nSELECT\n  SUM(revenue) AS total_revenue\nFROM\n  table_15b415fff1baab876355f990b86b316e\n\"\"\"\ndf_total = execute_sql_query(sql)\nif df_total.empty or df_total['total_revenue'].isnull().all():\n    total_revenue = 0\nelse:\n    total_val = df_total['total_revenue'].iloc[0]\n    try:\n        total_revenue = int(total_val)\n    except (TypeError, ValueError):\n        total_revenue = float(total_val)\nresult = {'type': 'number', 'value': total_revenue}\n2025-11-10 12:14:13 [INFO] Response generated successfully.\n\nAnswer: 196000\n[2025-11-10T12:14:13.390915] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the total revenue?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "196000",
+            "framework_answer": "196000",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total revenue?\n\nExpected Answer: 196000\nActual Answer: 196000\n\nReasoning: Sum of all revenue values\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total revenue?\"\"\"\nexpected_answer = \"\"\"196000\"\"\"\nactual_answer = \"\"\"196000\"\"\"\nreasoning = \"\"\"Sum of all revenue values\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\n\ndf['revenue'].sum()\n\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:14:13.391319] Starting Real Sketch query\nQuestion: What is the total revenue?\nDataFrame shape: (12, 4)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\\n\\ndf['revenue'].sum()\\n\\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\n\ndf['revenue'].sum()\n\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.\n[2025-11-10T12:14:42.139771] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the total revenue?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "196000",
+            "framework_answer": "I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\n\ndf['revenue'].sum()\n\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "The expected total revenue is 196000, but the actual answer does not provide that exact value. It states it cannot compute the exact total from the summary, offers an approximate estimate (198000) and a method to compute the exact total, so it is not equivalent to the expected precise result."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total revenue?\n\nExpected Answer: 196000\nActual Answer: I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\n\ndf['revenue'].sum()\n\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.\n\nReasoning: Sum of all revenue values\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The expected total revenue is 196000, but the actual answer does not provide that exact value. It states it cannot compute the exact total from the summary, offers an approximate estimate (198000) and a method to compute the exact total, so it is not equivalent to the expected precise result.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "The expected total revenue is 196000, but the actual answer does not provide that exact value. It states it cannot compute the exact total from the summary, offers an approximate estimate (198000) and a method to compute the exact total, so it is not equivalent to the expected precise result."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total revenue?\"\"\"\nexpected_answer = \"\"\"196000\"\"\"\nactual_answer = \"\"\"I can't compute the exact total from the summary alone (the full 12 revenue values aren't listed). To get the exact total in your environment, run:\n\ndf['revenue'].sum()\n\nIf you want a quick estimate using the median (16500) as the average: 16500 * 12 = 198000. If you provide the full revenue column I can compute the exact total.\"\"\"\nreasoning = \"\"\"Sum of all revenue values\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The total revenue is 196,000.00.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:14:42.141613] Starting LangChain query\nQuestion: What is the total revenue?\nDataFrame shape: (12, 4)\nColumns: ['date', 'revenue', 'customers', 'region']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The total revenue is 196,000.00.\n[2025-11-10T12:14:50.534180] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the total revenue?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "196000",
+            "framework_answer": "The total revenue is 196,000.00.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The numeric value is the same (196000). Formatting differs (comma and two decimals) but does not change the value."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total revenue?\n\nExpected Answer: 196000\nActual Answer: The total revenue is 196,000.00.\n\nReasoning: Sum of all revenue values\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The numeric value is the same (196000). Formatting differs (comma and two decimals) but does not change the value.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The numeric value is the same (196000). Formatting differs (comma and two decimals) but does not change the value."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total revenue?\"\"\"\nexpected_answer = \"\"\"196000\"\"\"\nactual_answer = \"\"\"The total revenue is 196,000.00.\"\"\"\nreasoning = \"\"\"Sum of all revenue values\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the average number of customers?",
+      "benchmark": {
+        "question": "What is the average number of customers?",
+        "answer": "160",
+        "reasoning": "Mean of customers column rounded to nearest integer"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "163.33333333333334",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:15:02.981145] Starting PandasAI query\nQuestion: What is the average number of customers?\nDataFrame shape: (12, 4)\n================================================================================\n\nAnswer: 163.33333333333334\n[2025-11-10T12:15:10.999180] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average number of customers?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "160",
+            "framework_answer": "163.33333333333334",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "The two answers are numerically different: 160 vs 163.33333333333334. If you round the actual mean to the nearest integer, you get 163, not 160. Therefore the Actual Answer does not match the Expected Answer and is not semantically equivalent."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average number of customers?\n\nExpected Answer: 160\nActual Answer: 163.33333333333334\n\nReasoning: Mean of customers column rounded to nearest integer\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The two answers are numerically different: 160 vs 163.33333333333334. If you round the actual mean to the nearest integer, you get 163, not 160. Therefore the Actual Answer does not match the Expected Answer and is not semantically equivalent.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "The two answers are numerically different: 160 vs 163.33333333333334. If you round the actual mean to the nearest integer, you get 163, not 160. Therefore the Actual Answer does not match the Expected Answer and is not semantically equivalent."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average number of customers?\"\"\"\nexpected_answer = \"\"\"160\"\"\"\nactual_answer = \"\"\"163.33333333333334\"\"\"\nreasoning = \"\"\"Mean of customers column rounded to nearest integer\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can't compute the exact average from the summary stats shown. To get it exactly, run:\n\n```python\ndf['customers'].mean()\n```\n\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\n\n```python\ndf['revenue'].mean() / 100\n```\n\nIf you want, paste the 12 customer values and I can compute the mean for you.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:15:10.999792] Starting Real Sketch query\nQuestion: What is the average number of customers?\nDataFrame shape: (12, 4)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can't compute the exact average from the summary stats shown. To get it exactly, run:\\n\\n```python\\ndf['customers'].mean()\\n```\\n\\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\\n\\n```python\\ndf['revenue'].mean() / 100\\n```\\n\\nIf you want, paste the 12 customer values and I can compute the mean for you.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can't compute the exact average from the summary stats shown. To get it exactly, run:\n\n```python\ndf['customers'].mean()\n```\n\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\n\n```python\ndf['revenue'].mean() / 100\n```\n\nIf you want, paste the 12 customer values and I can compute the mean for you.\n[2025-11-10T12:15:26.670753] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average number of customers?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "160",
+            "framework_answer": "I can't compute the exact average from the summary stats shown. To get it exactly, run:\n\n```python\ndf['customers'].mean()\n```\n\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\n\n```python\ndf['revenue'].mean() / 100\n```\n\nIf you want, paste the 12 customer values and I can compute the mean for you.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "Actual answer does not provide the numeric average and instead describes how to compute it, or asks for more data. The expected answer is the numeric value 160, so they are not equivalent."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average number of customers?\n\nExpected Answer: 160\nActual Answer: I can't compute the exact average from the summary stats shown. To get it exactly, run:\n\n```python\ndf['customers'].mean()\n```\n\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\n\n```python\ndf['revenue'].mean() / 100\n```\n\nIf you want, paste the 12 customer values and I can compute the mean for you.\n\nReasoning: Mean of customers column rounded to nearest integer\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|Actual answer does not provide the numeric average and instead describes how to compute it, or asks for more data. The expected answer is the numeric value 160, so they are not equivalent.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "Actual answer does not provide the numeric average and instead describes how to compute it, or asks for more data. The expected answer is the numeric value 160, so they are not equivalent."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average number of customers?\"\"\"\nexpected_answer = \"\"\"160\"\"\"\nactual_answer = \"\"\"I can't compute the exact average from the summary stats shown. To get it exactly, run:\n\n```python\ndf['customers'].mean()\n```\n\nNote: here revenue = customers * 100 (from the summaries), so you can also do:\n\n```python\ndf['revenue'].mean() / 100\n```\n\nIf you want, paste the 12 customer values and I can compute the mean for you.\"\"\"\nreasoning = \"\"\"Mean of customers column rounded to nearest integer\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average number of customers is 163.33 (exact mean = 163.33333333333334), computed as the mean of the \"customers\" column across the 12 records. Would you like the median, standard deviation, or a plot as well?",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:15:26.672163] Starting LangChain query\nQuestion: What is the average number of customers?\nDataFrame shape: (12, 4)\nColumns: ['date', 'revenue', 'customers', 'region']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The average number of customers is 163.33 (exact mean = 163.33333333333334), computed as the mean of the \"customers\" column across the 12 records. Would you like the median, standard deviation, or a plot as well?\n[2025-11-10T12:15:41.324481] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average number of customers?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "160",
+            "framework_answer": "The average number of customers is 163.33 (exact mean = 163.33333333333334), computed as the mean of the \"customers\" column across the 12 records. Would you like the median, standard deviation, or a plot as well?",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "The expected average is 160, but the actual answer gives 163.33 (163.3333...), which is a different value. Formatting/precision differences do not reconcile this discrepancy."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average number of customers?\n\nExpected Answer: 160\nActual Answer: The average number of customers is 163.33 (exact mean = 163.33333333333334), computed as the mean of the \"customers\" column across the 12 records. Would you like the median, standard deviation, or a plot as well?\n\nReasoning: Mean of customers column rounded to nearest integer\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The expected average is 160, but the actual answer gives 163.33 (163.3333...), which is a different value. Formatting/precision differences do not reconcile this discrepancy.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "The expected average is 160, but the actual answer gives 163.33 (163.3333...), which is a different value. Formatting/precision differences do not reconcile this discrepancy."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average number of customers?\"\"\"\nexpected_answer = \"\"\"160\"\"\"\nactual_answer = \"\"\"The average number of customers is 163.33 (exact mean = 163.33333333333334), computed as the mean of the \"customers\" column across the 12 records. Would you like the median, standard deviation, or a plot as well?\"\"\"\nreasoning = \"\"\"Mean of customers column rounded to nearest integer\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many months of data are there?",
+      "benchmark": {
+        "question": "How many months of data are there?",
+        "answer": "12",
+        "reasoning": "Count of rows in the dataset"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "12",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:16:01.040309] Starting PandasAI query\nQuestion: How many months of data are there?\nDataFrame shape: (12, 4)\n================================================================================\n\nAnswer: 12\n[2025-11-10T12:16:10.677456] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many months of data are there?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "12",
+            "framework_answer": "12",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many months of data are there?\n\nExpected Answer: 12\nActual Answer: 12\n\nReasoning: Count of rows in the dataset\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many months of data are there?\"\"\"\nexpected_answer = \"\"\"12\"\"\"\nactual_answer = \"\"\"12\"\"\"\nreasoning = \"\"\"Count of rows in the dataset\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "12 months (there are 12 rows / 12 unique dates).",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:16:10.677918] Starting Real Sketch query\nQuestion: How many months of data are there?\nDataFrame shape: (12, 4)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '12 months (there are 12 rows / 12 unique dates).'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 12 months (there are 12 rows / 12 unique dates).\n[2025-11-10T12:16:15.630924] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many months of data are there?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "12",
+            "framework_answer": "12 months (there are 12 rows / 12 unique dates).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Actual answer expresses the same value: 12 months, with additional note that there are 12 rows/unique dates. The numeric value matches the expected answer, and the extra wording does not change the semantic meaning."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many months of data are there?\n\nExpected Answer: 12\nActual Answer: 12 months (there are 12 rows / 12 unique dates).\n\nReasoning: Count of rows in the dataset\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Actual answer expresses the same value: 12 months, with additional note that there are 12 rows/unique dates. The numeric value matches the expected answer, and the extra wording does not change the semantic meaning.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Actual answer expresses the same value: 12 months, with additional note that there are 12 rows/unique dates. The numeric value matches the expected answer, and the extra wording does not change the semantic meaning."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many months of data are there?\"\"\"\nexpected_answer = \"\"\"12\"\"\"\nactual_answer = \"\"\"12 months (there are 12 rows / 12 unique dates).\"\"\"\nreasoning = \"\"\"Count of rows in the dataset\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 12 months of data (from 2024-01-31 through 2024-12-31).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:16:15.632292] Starting LangChain query\nQuestion: How many months of data are there?\nDataFrame shape: (12, 4)\nColumns: ['date', 'revenue', 'customers', 'region']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: There are 12 months of data (from 2024-01-31 through 2024-12-31).\n[2025-11-10T12:16:25.567089] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many months of data are there?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "12",
+            "framework_answer": "There are 12 months of data (from 2024-01-31 through 2024-12-31).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The Actual Answer states there are 12 months (and even specifies the date range); this matches the Expected Answer of 12 months. There is no discrepancy."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many months of data are there?\n\nExpected Answer: 12\nActual Answer: There are 12 months of data (from 2024-01-31 through 2024-12-31).\n\nReasoning: Count of rows in the dataset\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The Actual Answer states there are 12 months (and even specifies the date range); this matches the Expected Answer of 12 months. There is no discrepancy.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The Actual Answer states there are 12 months (and even specifies the date range); this matches the Expected Answer of 12 months. There is no discrepancy."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many months of data are there?\"\"\"\nexpected_answer = \"\"\"12\"\"\"\nactual_answer = \"\"\"There are 12 months of data (from 2024-01-31 through 2024-12-31).\"\"\"\nreasoning = \"\"\"Count of rows in the dataset\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the maximum revenue?",
+      "benchmark": {
+        "question": "What is the maximum revenue?",
+        "answer": "23000",
+        "reasoning": "Maximum value in revenue column"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "23000",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T12:16:34.168734] Starting PandasAI query\nQuestion: What is the maximum revenue?\nDataFrame shape: (12, 4)\n================================================================================\n\nAnswer: 23000\n[2025-11-10T12:16:43.421514] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "23000",
+            "framework_answer": "23000",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum revenue?\n\nExpected Answer: 23000\nActual Answer: 23000\n\nReasoning: Maximum value in revenue column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nexpected_answer = \"\"\"23000\"\"\"\nactual_answer = \"\"\"23000\"\"\"\nreasoning = \"\"\"Maximum value in revenue column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "23000",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T12:16:43.422139] Starting Real Sketch query\nQuestion: What is the maximum revenue?\nDataFrame shape: (12, 4)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n23000\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 23000\n[2025-11-10T12:16:47.884329] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "23000",
+            "framework_answer": "23000",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum revenue?\n\nExpected Answer: 23000\nActual Answer: 23000\n\nReasoning: Maximum value in revenue column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nexpected_answer = \"\"\"23000\"\"\"\nactual_answer = \"\"\"23000\"\"\"\nreasoning = \"\"\"Maximum value in revenue column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "I don\u2019t have the information needed yet \u2014 could you tell me the revenue function or share the data (prices and quantities) you\u2019re using?\n\nWhile you prepare that, here are quick ways to find the maximum revenue depending on the situation:\n\n1. If you have a continuous revenue function R(x) (single variable)\n   - Compute R\u2032(x) and solve R\u2032(x) = 0 for critical points.\n   - Check the second derivative: if R\u2033(x) < 0 at a critical point, it\u2019s a local maximum.\n   - If you\u2019re on a closed interval [a,b], evaluate R at critical points and at a and b; the largest value is the global maximum.\n\n   Example: demand p(x) = 100 \u2212 2x, revenue R(x) = x\u00b7p(x) = 100x \u2212 2x^2.\n   R\u2032(x) = 100 \u2212 4x \u2192 set = 0 \u2192 x = 25. R\u2033(x) = \u22124 < 0 so x = 25 gives the max revenue R(25) = 2500.\n\n2. If you have discrete data (pairs p_i, q_i)\n   - Compute revenue for each row: R_i = p_i \u00b7 q_i.\n   - The maximum revenue is max_i R_i (report the i and value).\n\n3. If the decision is vector-valued (multiple products)\n   - Maximize R(x) subject to constraints: set \u2207R = 0 and check Hessian (negative definite for a local max), or solve the constrained optimization (Lagrange multipliers or numerical solver).\n\n4. If quantities must be integers\n   - Find the continuous maximizer, then evaluate nearby integer points (floor/ceil) to find the best integer solution.\n\nIf you paste the revenue function or the dataset (or tell me the demand curve), I\u2019ll compute the maximum revenue for you and show the steps.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T12:16:47.885727] Starting LangChain query\nQuestion: What is the maximum revenue?\nDataFrame shape: (12, 4)\nColumns: ['date', 'revenue', 'customers', 'region']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: I don\u2019t have the information needed yet \u2014 could you tell me the revenue function or share the data (prices and quantities) you\u2019re using?\n\nWhile you prepare that, here are quick ways to find the maximum revenue depending on the situation:\n\n1. If you have a continuous revenue function R(x) (single variable)\n   - Compute R\u2032(x) and solve R\u2032(x) = 0 for critical points.\n   - Check the second derivative: if R\u2033(x) < 0 at a critical point, it\u2019s a local maximum.\n   - If you\u2019re on a closed interval [a,b], evaluate R at critical points and at a and b; the largest value is the global maximum.\n\n   Example: demand p(x) = 100 \u2212 2x, revenue R(x) = x\u00b7p(x) = 100x \u2212 2x^2.\n   R\u2032(x) = 100 \u2212 4x \u2192 set = 0 \u2192 x = 25. R\u2033(x) = \u22124 < 0 so x = 25 gives the max revenue R(25) = 2500.\n\n2. If you have discrete data (pairs p_i, q_i)\n   - Compute revenue for each row: R_i = p_i \u00b7 q_i.\n   - The maximum revenue is max_i R_i (report the i and value).\n\n3. If the decision is vector-valued (multiple products)\n   - Maximize R(x) subject to constraints: set \u2207R = 0 and check Hessian (negative definite for a local max), or solve the constrained optimization (Lagrange multipliers or numerical solver).\n\n4. If quantities must be integers\n   - Find the continuous maximizer, then evaluate nearby integer points (floor/ceil) to find the best integer solution.\n\nIf you paste the revenue function or the dataset (or tell me the demand curve), I\u2019ll compute the maximum revenue for you and show the steps.\n[2025-11-10T12:17:00.280258] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ndate,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "23000",
+            "framework_answer": "I don\u2019t have the information needed yet \u2014 could you tell me the revenue function or share the data (prices and quantities) you\u2019re using?\n\nWhile you prepare that, here are quick ways to find the maximum revenue depending on the situation:\n\n1. If you have a continuous revenue function R(x) (single variable)\n   - Compute R\u2032(x) and solve R\u2032(x) = 0 for critical points.\n   - Check the second derivative: if R\u2033(x) < 0 at a critical point, it\u2019s a local maximum.\n   - If you\u2019re on a closed interval [a,b], evaluate R at critical points and at a and b; the largest value is the global maximum.\n\n   Example: demand p(x) = 100 \u2212 2x, revenue R(x) = x\u00b7p(x) = 100x \u2212 2x^2.\n   R\u2032(x) = 100 \u2212 4x \u2192 set = 0 \u2192 x = 25. R\u2033(x) = \u22124 < 0 so x = 25 gives the max revenue R(25) = 2500.\n\n2. If you have discrete data (pairs p_i, q_i)\n   - Compute revenue for each row: R_i = p_i \u00b7 q_i.\n   - The maximum revenue is max_i R_i (report the i and value).\n\n3. If the decision is vector-valued (multiple products)\n   - Maximize R(x) subject to constraints: set \u2207R = 0 and check Hessian (negative definite for a local max), or solve the constrained optimization (Lagrange multipliers or numerical solver).\n\n4. If quantities must be integers\n   - Find the continuous maximizer, then evaluate nearby integer points (floor/ceil) to find the best integer solution.\n\nIf you paste the revenue function or the dataset (or tell me the demand curve), I\u2019ll compute the maximum revenue for you and show the steps.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "The Expected Answer is the numeric value 23000, while the Actual Answer asks for more data and provides general methods instead of giving a maximum revenue value. They do not convey the same result."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum revenue?\n\nExpected Answer: 23000\nActual Answer: I don\u2019t have the information needed yet \u2014 could you tell me the revenue function or share the data (prices and quantities) you\u2019re using?\n\nWhile you prepare that, here are quick ways to find the maximum revenue depending on the situation:\n\n1. If you have a continuous revenue function R(x) (single variable)\n   - Compute R\u2032(x) and solve R\u2032(x) = 0 for critical points.\n   - Check the second derivative: if R\u2033(x) < 0 at a critical point, it\u2019s a local maximum.\n   - If you\u2019re on a closed interval [a,b], evaluate R at critical points and at a and b; the largest value is the global maximum.\n\n   Example: demand p(x) = 100 \u2212 2x, revenue R(x) = x\u00b7p(x) = 100x \u2212 2x^2.\n   R\u2032(x) = 100 \u2212 4x \u2192 set = 0 \u2192 x = 25. R\u2033(x) = \u22124 < 0 so x = 25 gives the max revenue R(25) = 2500.\n\n2. If you have discrete data (pairs p_i, q_i)\n   - Compute revenue for each row: R_i = p_i \u00b7 q_i.\n   - The maximum revenue is max_i R_i (report the i and value).\n\n3. If the decision is vector-valued (multiple products)\n   - Maximize R(x) subject to constraints: set \u2207R = 0 and check Hessian (negative definite for a local max), or solve the constrained optimization (Lagrange multipliers or numerical solver).\n\n4. If quantities must be integers\n   - Find the continuous maximizer, then evaluate nearby integer points (floor/ceil) to find the best integer solution.\n\nIf you paste the revenue function or the dataset (or tell me the demand curve), I\u2019ll compute the maximum revenue for you and show the steps.\n\nReasoning: Maximum value in revenue column\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The Expected Answer is the numeric value 23000, while the Actual Answer asks for more data and provides general methods instead of giving a maximum revenue value. They do not convey the same result.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "The Expected Answer is the numeric value 23000, while the Actual Answer asks for more data and provides general methods instead of giving a maximum revenue value. They do not convey the same result."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum revenue?\"\"\"\nexpected_answer = \"\"\"23000\"\"\"\nactual_answer = \"\"\"I don\u2019t have the information needed yet \u2014 could you tell me the revenue function or share the data (prices and quantities) you\u2019re using?\n\nWhile you prepare that, here are quick ways to find the maximum revenue depending on the situation:\n\n1. If you have a continuous revenue function R(x) (single variable)\n   - Compute R\u2032(x) and solve R\u2032(x) = 0 for critical points.\n   - Check the second derivative: if R\u2033(x) < 0 at a critical point, it\u2019s a local maximum.\n   - If you\u2019re on a closed interval [a,b], evaluate R at critical points and at a and b; the largest value is the global maximum.\n\n   Example: demand p(x) = 100 \u2212 2x, revenue R(x) = x\u00b7p(x) = 100x \u2212 2x^2.\n   R\u2032(x) = 100 \u2212 4x \u2192 set = 0 \u2192 x = 25. R\u2033(x) = \u22124 < 0 so x = 25 gives the max revenue R(25) = 2500.\n\n2. If you have discrete data (pairs p_i, q_i)\n   - Compute revenue for each row: R_i = p_i \u00b7 q_i.\n   - The maximum revenue is max_i R_i (report the i and value).\n\n3. If the decision is vector-valued (multiple products)\n   - Maximize R(x) subject to constraints: set \u2207R = 0 and check Hessian (negative definite for a local max), or solve the constrained optimization (Lagrange multipliers or numerical solver).\n\n4. If quantities must be integers\n   - Find the continuous maximizer, then evaluate nearby integer points (floor/ceil) to find the best integer solution.\n\nIf you paste the revenue function or the dataset (or tell me the demand curve), I\u2019ll compute the maximum revenue for you and show the steps.\"\"\"\nreasoning = \"\"\"Maximum value in revenue column\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "date,revenue,customers,region\n2024-01-31,10000,100,North\n2024-02-29,12000,120,South\n2024-03-31,11000,110,North\n2024-04-30,15000,150,South\n2024-05-31,14000,140,North\n2024-06-30,16000,160,South\n2024-07-31,18000,180,North\n2024-08-31,17000,170,South\n2024-09-30,19000,190,North\n2024-10-31,21000,210,South\n2024-11-30,20000,200,North\n2024-12-31,23000,230,South\n"
+}
