@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "dataset_name": "employees",
+    "timestamp": "20251110_130451",
+    "total_questions": 4,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "What is the average salary?",
+      "benchmark": {
+        "question": "What is the average salary?",
+        "answer": "99414.12",
+        "reasoning": "Mean of salary column: 99414.12"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "99414.12",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:02:26.569319] Starting PandasAI query\nQuestion: What is the average salary?\nDataFrame shape: (50, 7)\n================================================================================\n2025-11-10 13:02:26 [INFO] Question: What is the average salary?\n2025-11-10 13:02:26 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 13:02:26 [INFO] Prompt ID: 6fdd2b87-33b1-4885-bd44-20182c02ff31\n2025-11-10 13:02:26 [INFO] Generating new code...\n2025-11-10 13:02:26 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_1e40203a85fe6402293370e653c96490\" columns=\"[{\"name\": \"employee_id\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"name\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"department\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"salary\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"years_experience\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"performance_rating\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"is_remote\", \"type\": \"boolean\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"50x7\">\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n What is the average salary?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 13:02:35 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Use the provided function execute_sql_query to run an aggregation SQL query\nsql = \"\"\"\nSELECT AVG(salary) AS avg_salary\nFROM table_1e40203a85fe6402293370e653c96490\n\"\"\"\n\n# Execute the query\ndf_avg = execute_sql_query(sql)\n\n# Extract the average salary value (as a float)\navg_salary = float(df_avg[\"avg_salary\"].iloc[0])\n\n# Optionally round to 2 decimal places\navg_salary = round(avg_salary, 2)\n\n# Declare result var:\nresult = { \"type\": \"number\", \"value\": avg_salary }\n2025-11-10 13:02:35 [INFO] Validating code requirements...\n2025-11-10 13:02:35 [INFO] Code validation successful.\n2025-11-10 13:02:35 [INFO] Cleaning the generated code...\n2025-11-10 13:02:35 [INFO] Executing code: import pandas as pd\nsql = \"\"\"\nSELECT AVG(salary) AS avg_salary\nFROM table_1e40203a85fe6402293370e653c96490\n\"\"\"\ndf_avg = execute_sql_query(sql)\navg_salary = float(df_avg['avg_salary'].iloc[0])\navg_salary = round(avg_salary, 2)\nresult = {'type': 'number', 'value': avg_salary}\n2025-11-10 13:02:35 [INFO] Response generated successfully.\n\nAnswer: 99414.12\n[2025-11-10T13:02:35.328362] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average salary?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "99414.12",
+            "framework_answer": "99414.12",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average salary?\n\nExpected Answer: 99414.12\nActual Answer: 99414.12\n\nReasoning: Mean of salary column: 99414.12\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average salary?\"\"\"\nexpected_answer = \"\"\"99414.12\"\"\"\nactual_answer = \"\"\"99414.12\"\"\"\nreasoning = \"\"\"Mean of salary column: 99414.12\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\n\ndf['salary'].mean()\n\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:02:35.328662] Starting Real Sketch query\nQuestion: What is the average salary?\nDataFrame shape: (50, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\\n\\ndf['salary'].mean()\\n\\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\n\ndf['salary'].mean()\n\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.\n[2025-11-10T13:02:50.344329] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average salary?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "99414.12",
+            "framework_answer": "I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\n\ndf['salary'].mean()\n\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.58,
+              "explanation": "The expected answer is the exact value 99414.12, but the actual answer does not provide that exact mean. It defers to computing via df['salary'].mean() and offers only a rough estimate (~105k) rather than the precise value. The internal note showing 99414.12 is not presented as the final answer."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average salary?\n\nExpected Answer: 99414.12\nActual Answer: I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\n\ndf['salary'].mean()\n\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.\n\nReasoning: Mean of salary column: 99414.12\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The expected answer is the exact value 99414.12, but the actual answer does not provide that exact mean. It defers to computing via df['salary'].mean() and offers only a rough estimate (~105k) rather than the precise value. The internal note showing 99414.12 is not presented as the final answer.|0.58",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.58,
+                "explanation": "The expected answer is the exact value 99414.12, but the actual answer does not provide that exact mean. It defers to computing via df['salary'].mean() and offers only a rough estimate (~105k) rather than the precise value. The internal note showing 99414.12 is not presented as the final answer."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average salary?\"\"\"\nexpected_answer = \"\"\"99414.12\"\"\"\nactual_answer = \"\"\"I can\u2019t compute the exact average (mean) from the summary statistics you provided. To get the exact average salary, run:\n\ndf['salary'].mean()\n\nFrom the summary you did give: the median (50th percentile) salary is 101,230, Q1 = 75,730.25 and Q3 = 129,931.5, so the distribution is right-skewed and the true mean is likely somewhat above the median (roughly an estimate around ~105k), but that is only an approximation. If you want, paste the salary values (or the full df) and I\u2019ll compute the exact mean.\"\"\"\nreasoning = \"\"\"Mean of salary column: 99414.12\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average salary in the dataset is 99,414.12 (same currency/units as in the data). Would you like the median, grouped averages, or a distribution plot?",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:02:50.345809] Starting LangChain query\nQuestion: What is the average salary?\nDataFrame shape: (50, 7)\nColumns: ['employee_id', 'name', 'department', 'salary', 'years_experience', 'performance_rating', 'is_remote']\n================================================================================\n\nAgent created, executing query...\n(50, 7)\n['employee_id', 'name', 'department', 'salary', 'years_experience', 'performance_rating', 'is_remote']\nPossible salary columns: ['salary']\n\nAnswer: The average salary in the dataset is 99,414.12 (same currency/units as in the data). Would you like the median, grouped averages, or a distribution plot?\n[2025-11-10T13:03:01.805325] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average salary?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "99414.12",
+            "framework_answer": "The average salary in the dataset is 99,414.12 (same currency/units as in the data). Would you like the median, grouped averages, or a distribution plot?",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.9,
+              "explanation": "The actual value 99,414.12 is numerically equal to 99414.12; formatting uses a comma as thousand separator and includes extra clarifying text, but the mean value is the same."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average salary?\n\nExpected Answer: 99414.12\nActual Answer: The average salary in the dataset is 99,414.12 (same currency/units as in the data). Would you like the median, grouped averages, or a distribution plot?\n\nReasoning: Mean of salary column: 99414.12\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual value 99,414.12 is numerically equal to 99414.12; formatting uses a comma as thousand separator and includes extra clarifying text, but the mean value is the same.|0.90",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.9,
+                "explanation": "The actual value 99,414.12 is numerically equal to 99414.12; formatting uses a comma as thousand separator and includes extra clarifying text, but the mean value is the same."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average salary?\"\"\"\nexpected_answer = \"\"\"99414.12\"\"\"\nactual_answer = \"\"\"The average salary in the dataset is 99,414.12 (same currency/units as in the data). Would you like the median, grouped averages, or a distribution plot?\"\"\"\nreasoning = \"\"\"Mean of salary column: 99414.12\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the highest salary?",
+      "benchmark": {
+        "question": "What is the highest salary?",
+        "answer": "149953",
+        "reasoning": "Maximum salary value: 149953"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "149953",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:03:21.092755] Starting PandasAI query\nQuestion: What is the highest salary?\nDataFrame shape: (50, 7)\n================================================================================\n\nAnswer: 149953\n[2025-11-10T13:03:25.243044] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the highest salary?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "149953",
+            "framework_answer": "149953",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest salary?\n\nExpected Answer: 149953\nActual Answer: 149953\n\nReasoning: Maximum salary value: 149953\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest salary?\"\"\"\nexpected_answer = \"\"\"149953\"\"\"\nactual_answer = \"\"\"149953\"\"\"\nreasoning = \"\"\"Maximum salary value: 149953\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "149953",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:03:25.243525] Starting Real Sketch query\nQuestion: What is the highest salary?\nDataFrame shape: (50, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n149953\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 149953\n[2025-11-10T13:03:27.797230] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the highest salary?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "149953",
+            "framework_answer": "149953",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest salary?\n\nExpected Answer: 149953\nActual Answer: 149953\n\nReasoning: Maximum salary value: 149953\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest salary?\"\"\"\nexpected_answer = \"\"\"149953\"\"\"\nactual_answer = \"\"\"149953\"\"\"\nreasoning = \"\"\"Maximum salary value: 149953\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The highest salary is 149,953. \n\nEmployee(s) with that salary:\n- ID 32 \u2014 Jane Martinez (Finance), 7 years experience, performance rating 3.3, not remote.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:03:27.798562] Starting LangChain query\nQuestion: What is the highest salary?\nDataFrame shape: (50, 7)\nColumns: ['employee_id', 'name', 'department', 'salary', 'years_experience', 'performance_rating', 'is_remote']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The highest salary is 149,953. \n\nEmployee(s) with that salary:\n- ID 32 \u2014 Jane Martinez (Finance), 7 years experience, performance rating 3.3, not remote.\n[2025-11-10T13:03:39.825076] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the highest salary?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "149953",
+            "framework_answer": "The highest salary is 149,953. \n\nEmployee(s) with that salary:\n- ID 32 \u2014 Jane Martinez (Finance), 7 years experience, performance rating 3.3, not remote.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The numeric value is the same: 149953 vs 149,953; the comma is just formatting and does not change the value. The additional lines do not alter the highest salary value."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest salary?\n\nExpected Answer: 149953\nActual Answer: The highest salary is 149,953. \n\nEmployee(s) with that salary:\n- ID 32 \u2014 Jane Martinez (Finance), 7 years experience, performance rating 3.3, not remote.\n\nReasoning: Maximum salary value: 149953\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The numeric value is the same: 149953 vs 149,953; the comma is just formatting and does not change the value. The additional lines do not alter the highest salary value.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The numeric value is the same: 149953 vs 149,953; the comma is just formatting and does not change the value. The additional lines do not alter the highest salary value."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest salary?\"\"\"\nexpected_answer = \"\"\"149953\"\"\"\nactual_answer = \"\"\"The highest salary is 149,953. \n\nEmployee(s) with that salary:\n- ID 32 \u2014 Jane Martinez (Finance), 7 years experience, performance rating 3.3, not remote.\"\"\"\nreasoning = \"\"\"Maximum salary value: 149953\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many employees are in Engineering?",
+      "benchmark": {
+        "question": "How many employees are in Engineering?",
+        "answer": "8",
+        "reasoning": "Count of employees where department='Engineering': 8"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "8",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:03:45.123217] Starting PandasAI query\nQuestion: How many employees are in Engineering?\nDataFrame shape: (50, 7)\n================================================================================\n\nAnswer: 8\n[2025-11-10T13:03:49.002904] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "8",
+            "framework_answer": "8",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees are in Engineering?\n\nExpected Answer: 8\nActual Answer: 8\n\nReasoning: Count of employees where department='Engineering': 8\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nexpected_answer = \"\"\"8\"\"\"\nactual_answer = \"\"\"8\"\"\"\nreasoning = \"\"\"Count of employees where department='Engineering': 8\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\n\nTo get the number of employees in Engineering, run one of these in pandas:\n\n- df['department'].value_counts()['Engineering']\n- df['department'].value_counts().get('Engineering', 0)\n- df[df['department'] == 'Engineering'].shape[0]\n\nIf you run one of those and paste the output here, I can confirm or help further.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:03:49.003385] Starting Real Sketch query\nQuestion: How many employees are in Engineering?\nDataFrame shape: (50, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\\n\\nTo get the number of employees in Engineering, run one of these in pandas:\\n\\n- df['department'].value_counts()['Engineering']\\n- df['department'].value_counts().get('Engineering', 0)\\n- df[df['department'] == 'Engineering'].shape[0]\\n\\nIf you run one of those and paste the output here, I can confirm or help further.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\n\nTo get the number of employees in Engineering, run one of these in pandas:\n\n- df['department'].value_counts()['Engineering']\n- df['department'].value_counts().get('Engineering', 0)\n- df[df['department'] == 'Engineering'].shape[0]\n\nIf you run one of those and paste the output here, I can confirm or help further.\n[2025-11-10T13:03:52.516855] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "8",
+            "framework_answer": "I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\n\nTo get the number of employees in Engineering, run one of these in pandas:\n\n- df['department'].value_counts()['Engineering']\n- df['department'].value_counts().get('Engineering', 0)\n- df[df['department'] == 'Engineering'].shape[0]\n\nIf you run one of those and paste the output here, I can confirm or help further.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.68,
+              "explanation": "Actual answer does not provide the numeric count; it only gives methods to compute the count and asks for the output, while the expected answer is the explicit number 8. If the computed result were included, it would be equivalent, but as given it does not match."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees are in Engineering?\n\nExpected Answer: 8\nActual Answer: I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\n\nTo get the number of employees in Engineering, run one of these in pandas:\n\n- df['department'].value_counts()['Engineering']\n- df['department'].value_counts().get('Engineering', 0)\n- df[df['department'] == 'Engineering'].shape[0]\n\nIf you run one of those and paste the output here, I can confirm or help further.\n\nReasoning: Count of employees where department='Engineering': 8\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|Actual answer does not provide the numeric count; it only gives methods to compute the count and asks for the output, while the expected answer is the explicit number 8. If the computed result were included, it would be equivalent, but as given it does not match.|0.68",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.68,
+                "explanation": "Actual answer does not provide the numeric count; it only gives methods to compute the count and asks for the output, while the expected answer is the explicit number 8. If the computed result were included, it would be equivalent, but as given it does not match."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nexpected_answer = \"\"\"8\"\"\"\nactual_answer = \"\"\"I can\u2019t tell the exact count from the summary you posted \u2014 it only lists the distinct departments, not counts per department.\n\nTo get the number of employees in Engineering, run one of these in pandas:\n\n- df['department'].value_counts()['Engineering']\n- df['department'].value_counts().get('Engineering', 0)\n- df[df['department'] == 'Engineering'].shape[0]\n\nIf you run one of those and paste the output here, I can confirm or help further.\"\"\"\nreasoning = \"\"\"Count of employees where department='Engineering': 8\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 8 employees in Engineering. \n\nThey are: James Martinez (ID 3), Jane Davis (9), Robert Smith (13), David Williams (17), Maria Jones (23), Robert Rodriguez (39), Robert Miller (49), and Robert Davis (50).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:03:52.518285] Starting LangChain query\nQuestion: How many employees are in Engineering?\nDataFrame shape: (50, 7)\nColumns: ['employee_id', 'name', 'department', 'salary', 'years_experience', 'performance_rating', 'is_remote']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: There are 8 employees in Engineering. \n\nThey are: James Martinez (ID 3), Jane Davis (9), Robert Smith (13), David Williams (17), Maria Jones (23), Robert Rodriguez (39), Robert Miller (49), and Robert Davis (50).\n[2025-11-10T13:04:08.325455] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "8",
+            "framework_answer": "There are 8 employees in Engineering. \n\nThey are: James Martinez (ID 3), Jane Davis (9), Robert Smith (13), David Williams (17), Maria Jones (23), Robert Rodriguez (39), Robert Miller (49), and Robert Davis (50).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states there are 8 employees in Engineering, which matches the expected answer. The extra listing of employees is additional detail but does not alter the count."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees are in Engineering?\n\nExpected Answer: 8\nActual Answer: There are 8 employees in Engineering. \n\nThey are: James Martinez (ID 3), Jane Davis (9), Robert Smith (13), David Williams (17), Maria Jones (23), Robert Rodriguez (39), Robert Miller (49), and Robert Davis (50).\n\nReasoning: Count of employees where department='Engineering': 8\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states there are 8 employees in Engineering, which matches the expected answer. The extra listing of employees is additional detail but does not alter the count.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states there are 8 employees in Engineering, which matches the expected answer. The extra listing of employees is additional detail but does not alter the count."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees are in Engineering?\"\"\"\nexpected_answer = \"\"\"8\"\"\"\nactual_answer = \"\"\"There are 8 employees in Engineering. \n\nThey are: James Martinez (ID 3), Jane Davis (9), Robert Smith (13), David Williams (17), Maria Jones (23), Robert Rodriguez (39), Robert Miller (49), and Robert Davis (50).\"\"\"\nreasoning = \"\"\"Count of employees where department='Engineering': 8\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many employees work remotely?",
+      "benchmark": {
+        "question": "How many employees work remotely?",
+        "answer": "26",
+        "reasoning": "Count where is_remote=True: 26"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "26",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:04:21.003872] Starting PandasAI query\nQuestion: How many employees work remotely?\nDataFrame shape: (50, 7)\n================================================================================\n\nAnswer: 26\n[2025-11-10T13:04:26.272636] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many employees work remotely?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "26",
+            "framework_answer": "26",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees work remotely?\n\nExpected Answer: 26\nActual Answer: 26\n\nReasoning: Count where is_remote=True: 26\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees work remotely?\"\"\"\nexpected_answer = \"\"\"26\"\"\"\nactual_answer = \"\"\"26\"\"\"\nreasoning = \"\"\"Count where is_remote=True: 26\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\n\n- Simple sum (booleans sum to integers):\n```python\nnum_remote = df['is_remote'].sum()\nprint(num_remote)\n```\n\n- Or explicit counts:\n```python\ndf['is_remote'].value_counts()\n# then read the True count\n```\n\n- Or via filtering:\n```python\nnum_remote = df[df['is_remote'] == True].shape[0]\nprint(num_remote)\n```\n\nAny of those will give the number of employees who work remotely.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:04:26.273042] Starting Real Sketch query\nQuestion: How many employees work remotely?\nDataFrame shape: (50, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\\n\\n- Simple sum (booleans sum to integers):\\n```python\\nnum_remote = df['is_remote'].sum()\\nprint(num_remote)\\n```\\n\\n- Or explicit counts:\\n```python\\ndf['is_remote'].value_counts()\\n# then read the True count\\n```\\n\\n- Or via filtering:\\n```python\\nnum_remote = df[df['is_remote'] == True].shape[0]\\nprint(num_remote)\\n```\\n\\nAny of those will give the number of employees who work remotely.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\n\n- Simple sum (booleans sum to integers):\n```python\nnum_remote = df['is_remote'].sum()\nprint(num_remote)\n```\n\n- Or explicit counts:\n```python\ndf['is_remote'].value_counts()\n# then read the True count\n```\n\n- Or via filtering:\n```python\nnum_remote = df[df['is_remote'] == True].shape[0]\nprint(num_remote)\n```\n\nAny of those will give the number of employees who work remotely.\n[2025-11-10T13:04:31.723847] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many employees work remotely?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "26",
+            "framework_answer": "I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\n\n- Simple sum (booleans sum to integers):\n```python\nnum_remote = df['is_remote'].sum()\nprint(num_remote)\n```\n\n- Or explicit counts:\n```python\ndf['is_remote'].value_counts()\n# then read the True count\n```\n\n- Or via filtering:\n```python\nnum_remote = df[df['is_remote'] == True].shape[0]\nprint(num_remote)\n```\n\nAny of those will give the number of employees who work remotely.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.72,
+              "explanation": "The Expected Answer is 26. The Actual Answer, though not stating the number outright, indicates via its reasoning that the count of remote employees is 26 and provides valid methods to compute it. Therefore, the semantic result matches."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees work remotely?\n\nExpected Answer: 26\nActual Answer: I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\n\n- Simple sum (booleans sum to integers):\n```python\nnum_remote = df['is_remote'].sum()\nprint(num_remote)\n```\n\n- Or explicit counts:\n```python\ndf['is_remote'].value_counts()\n# then read the True count\n```\n\n- Or via filtering:\n```python\nnum_remote = df[df['is_remote'] == True].shape[0]\nprint(num_remote)\n```\n\nAny of those will give the number of employees who work remotely.\n\nReasoning: Count where is_remote=True: 26\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The Expected Answer is 26. The Actual Answer, though not stating the number outright, indicates via its reasoning that the count of remote employees is 26 and provides valid methods to compute it. Therefore, the semantic result matches. |0.72",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.72,
+                "explanation": "The Expected Answer is 26. The Actual Answer, though not stating the number outright, indicates via its reasoning that the count of remote employees is 26 and provides valid methods to compute it. Therefore, the semantic result matches."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees work remotely?\"\"\"\nexpected_answer = \"\"\"26\"\"\"\nactual_answer = \"\"\"I can\u2019t tell the exact number from the provided summary (it shows only that there are 2 unique values and a few sample values). To get the count, run one of these in Python:\n\n- Simple sum (booleans sum to integers):\n```python\nnum_remote = df['is_remote'].sum()\nprint(num_remote)\n```\n\n- Or explicit counts:\n```python\ndf['is_remote'].value_counts()\n# then read the True count\n```\n\n- Or via filtering:\n```python\nnum_remote = df[df['is_remote'] == True].shape[0]\nprint(num_remote)\n```\n\nAny of those will give the number of employees who work remotely.\"\"\"\nreasoning = \"\"\"Count where is_remote=True: 26\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "26 employees work remotely (26 of 50, 52%).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:04:31.725094] Starting LangChain query\nQuestion: How many employees work remotely?\nDataFrame shape: (50, 7)\nColumns: ['employee_id', 'name', 'department', 'salary', 'years_experience', 'performance_rating', 'is_remote']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: 26 employees work remotely (26 of 50, 52%).\n[2025-11-10T13:04:38.228912] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nemployee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many employees work remotely?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "26",
+            "framework_answer": "26 employees work remotely (26 of 50, 52%).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.95,
+              "explanation": "Both indicate the same count: 26 employees work remotely. The actual answer includes extra context but does not change the value; formatting differs but semantic value is identical"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many employees work remotely?\n\nExpected Answer: 26\nActual Answer: 26 employees work remotely (26 of 50, 52%).\n\nReasoning: Count where is_remote=True: 26\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both indicate the same count: 26 employees work remotely. The actual answer includes extra context but does not change the value; formatting differs but semantic value is identical|0.95",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.95,
+                "explanation": "Both indicate the same count: 26 employees work remotely. The actual answer includes extra context but does not change the value; formatting differs but semantic value is identical"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many employees work remotely?\"\"\"\nexpected_answer = \"\"\"26\"\"\"\nactual_answer = \"\"\"26 employees work remotely (26 of 50, 52%).\"\"\"\nreasoning = \"\"\"Count where is_remote=True: 26\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "employee_id,name,department,salary,years_experience,performance_rating,is_remote\n1,James Brown,HR,70080,22,5.0,False\n2,Lisa Jones,Sales,106842,3,4.9,False\n3,James Martinez,Engineering,101373,22,3.9,True\n4,Michael Miller,Finance,46776,10,4.7,False\n5,Lisa Jones,Marketing,132787,23,3.0,False\n6,Sarah Davis,HR,95016,16,3.2,False\n7,Lisa Williams,Marketing,49474,5,4.3,True\n8,Emily Jones,Marketing,145830,23,4.6,False\n9,Jane Davis,Engineering,98053,4,4.6,False\n10,Emily Johnson,Marketing,61959,19,3.5,False\n11,David Smith,Finance,45530,1,4.7,True\n12,Maria Garcia,Marketing,134856,5,4.6,True\n13,Robert Smith,Engineering,43748,21,4.8,True\n14,Maria Williams,Finance,137504,10,4.5,True\n15,James Brown,Sales,138098,15,4.2,False\n16,Robert Williams,Marketing,53545,15,4.0,True\n17,David Williams,Engineering,106199,0,3.4,True\n18,James Jones,Sales,74766,8,4.9,False\n19,Robert Miller,Sales,113530,5,4.9,False\n20,Jane Brown,HR,133557,15,3.2,True\n21,Robert Johnson,Finance,101087,2,3.3,True\n22,Maria Rodriguez,Marketing,135839,19,3.7,False\n23,Maria Jones,Engineering,108840,3,3.6,True\n24,Jane Brown,HR,94384,18,5.0,True\n25,James Davis,Finance,91005,2,2.9,True\n26,Michael Smith,HR,86576,18,2.5,True\n27,Sarah Johnson,Finance,79353,19,3.7,False\n28,Lisa Brown,Finance,102003,6,2.9,True\n29,Jane Garcia,Marketing,123211,19,3.4,False\n30,Emily Martinez,Finance,92733,8,4.4,False\n31,Sarah Garcia,HR,105318,0,4.3,True\n32,Jane Martinez,Finance,149953,7,3.3,False\n33,Jane Martinez,Marketing,129474,6,3.9,True\n34,Sarah Davis,Marketing,63664,17,3.8,False\n35,James Rodriguez,HR,107172,7,4.1,True\n36,Lisa Jones,Sales,125616,0,3.1,True\n37,Jane Jones,Sales,133264,10,4.0,False\n38,Lisa Martinez,Finance,66736,24,4.9,True\n39,Robert Rodriguez,Engineering,134209,24,3.7,True\n40,John Rodriguez,Finance,143041,17,4.8,True\n41,James Rodriguez,HR,40854,22,3.6,True\n42,Lisa Smith,HR,130084,9,3.4,False\n43,Lisa Davis,HR,78623,2,4.1,True\n44,Michael Smith,HR,47392,6,4.2,False\n45,Lisa Williams,HR,95680,15,4.7,False\n46,Michael Smith,Marketing,86717,15,3.1,False\n47,David Martinez,Sales,127092,24,3.7,True\n48,James Martinez,HR,90859,19,3.9,True\n49,Robert Miller,Engineering,144095,16,4.4,False\n50,Robert Davis,Engineering,66309,1,2.6,False\n"
+}

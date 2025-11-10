@@ -32,7 +32,6 @@ ENV/
 env/
 
 # Results and data
-results/*.json
 data/*.csv
 data/*.xlsx
 

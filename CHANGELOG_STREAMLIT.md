@@ -98,7 +98,7 @@ Added a comprehensive Streamlit-based web dashboard for visualizing and analyzin
 - `streamlit==1.28.0`
 - `plotly==5.18.0`
 
-Updated: `requirements.txt`
+Updated: `requirements.txt` (Streamlit-only dependencies)
 
 ---
 

@@ -16,7 +16,9 @@
 ```
 dashboard-qa-benchmark/
 ├── main.py                    # Основной скрипт
-├── requirements.txt           # Зависимости
+├── requirements-benchmarks.txt  # Зависимости для CLI-бенчмарков
+├── requirements-streamlit.txt   # Зависимости для дашборда Streamlit
+├── requirements.txt             # Основные зависимости для дашборда (идентичны requirements-streamlit.txt)
 ├── .env                       # API ключи (не включен в git)
 ├── src/
 │   ├── benchmark_datasets.py  # Датасеты с Q&A парами
@@ -39,9 +41,16 @@ python3 -m venv venv
 source venv/bin/activate  # На Windows: venv\Scripts\activate
 ```
 
-3. Установите зависимости:
+3. Установите зависимости (выберите нужный сценарий):
 ```bash
+# Только CLI-бенчмарки
+pip install -r requirements-benchmarks.txt
+
+# Только Streamlit-дэшборд
 pip install -r requirements.txt
+
+# Альтернативно: тот же набор зависимостей в отдельном файле
+# pip install -r requirements-streamlit.txt
 ```
 
 4. Настройте API ключ OpenAI:
@@ -219,7 +228,7 @@ AVAILABLE_DATASETS = {
 
 - Python 3.8+
 - OpenAI API ключ
-- Зависимости из requirements.txt
+- Зависимости для Streamlit UI (`requirements.txt`) и/или CLI (`requirements-benchmarks.txt`)
 
 ## Лицензия
 
@@ -241,4 +250,5 @@ MIT
 
 Если возникают ошибки импорта:
 - Убедитесь, что виртуальное окружение активировано
-- Переустановите зависимости: `pip install -r requirements.txt --force-reinstall`
+- Переустановите Streamlit-зависимости: `pip install -r requirements.txt --force-reinstall`
+- Для CLI-бенчмарков переустановите: `pip install -r requirements-benchmarks.txt --force-reinstall`

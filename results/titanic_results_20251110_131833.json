@@ -1,0 +1,556 @@
+{
+  "metadata": {
+    "dataset_name": "titanic",
+    "timestamp": "20251110_131833",
+    "total_questions": 5,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "How many passengers were on the Titanic?",
+      "benchmark": {
+        "question": "How many passengers were on the Titanic?",
+        "answer": "100",
+        "reasoning": "Total number of rows: 100"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "100",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:14:17.575517] Starting PandasAI query\nQuestion: How many passengers were on the Titanic?\nDataFrame shape: (100, 15)\n================================================================================\n2025-11-10 13:14:17 [INFO] Question: How many passengers were on the Titanic?\n2025-11-10 13:14:17 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 13:14:17 [INFO] Prompt ID: 3908ac46-c2e8-43a0-a205-eec6a5641dca\n2025-11-10 13:14:17 [INFO] Generating new code...\n2025-11-10 13:14:17 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_164b6df8fc5031d0e71bf1966a251a77\" columns=\"[{\"name\": \"survived\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"pclass\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"sex\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"age\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"sibsp\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"parch\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"fare\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"embarked\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"class\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"who\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"adult_male\", \"type\": \"boolean\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"deck\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"embark_town\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"alive\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"alone\", \"type\": \"boolean\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"100x15\">\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n How many passengers were on the Titanic?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 13:14:24 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# SQL query to count number of passengers in the provided table\nsql_query = \"\"\"\nSELECT COUNT(*) AS passenger_count\nFROM table_164b6df8fc5031d0e71bf1966a251a77\n\"\"\"\n\n# execute the query (function provided externally)\ndf_count = execute_sql_query(sql_query)\n\n# extract the count value\npassenger_count = int(df_count.at[0, \"passenger_count\"])\n\n# Declare result var:\nresult = { \"type\": \"number\", \"value\": passenger_count }\n2025-11-10 13:14:24 [INFO] Validating code requirements...\n2025-11-10 13:14:24 [INFO] Code validation successful.\n2025-11-10 13:14:24 [INFO] Cleaning the generated code...\n2025-11-10 13:14:24 [INFO] Executing code: import pandas as pd\nsql_query = \"\"\"\nSELECT COUNT(*) AS passenger_count\nFROM table_164b6df8fc5031d0e71bf1966a251a77\n\"\"\"\ndf_count = execute_sql_query(sql_query)\npassenger_count = int(df_count.at[0, 'passenger_count'])\nresult = {'type': 'number', 'value': passenger_count}\n2025-11-10 13:14:25 [INFO] Response generated successfully.\n\nAnswer: 100\n[2025-11-10T13:14:25.197911] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "100",
+            "framework_answer": "100",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers were on the Titanic?\n\nExpected Answer: 100\nActual Answer: 100\n\nReasoning: Total number of rows: 100\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nexpected_answer = \"\"\"100\"\"\"\nactual_answer = \"\"\"100\"\"\"\nreasoning = \"\"\"Total number of rows: 100\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "100",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:14:25.198231] Starting Real Sketch query\nQuestion: How many passengers were on the Titanic?\nDataFrame shape: (100, 15)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n100\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 100\n[2025-11-10T13:14:29.865445] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "100",
+            "framework_answer": "100",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers were on the Titanic?\n\nExpected Answer: 100\nActual Answer: 100\n\nReasoning: Total number of rows: 100\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nexpected_answer = \"\"\"100\"\"\"\nactual_answer = \"\"\"100\"\"\"\nreasoning = \"\"\"Total number of rows: 100\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "Do you mean the RMS Titanic (the 1912 ship) and do you want the total number of people aboard or just the number of passengers (excluding crew)?\n\nQuick answer: on the Titanic's maiden voyage there were about 2,224 people on board in total \u2014 commonly broken down as roughly 1,317 passengers and 907 crew. Sources vary slightly on the exact counts. I can give the precise breakdown by class and survival numbers if you want.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:14:29.867133] Starting LangChain query\nQuestion: How many passengers were on the Titanic?\nDataFrame shape: (100, 15)\nColumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: Do you mean the RMS Titanic (the 1912 ship) and do you want the total number of people aboard or just the number of passengers (excluding crew)?\n\nQuick answer: on the Titanic's maiden voyage there were about 2,224 people on board in total \u2014 commonly broken down as roughly 1,317 passengers and 907 crew. Sources vary slightly on the exact counts. I can give the precise breakdown by class and survival numbers if you want.\n[2025-11-10T13:14:40.861767] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "100",
+            "framework_answer": "Do you mean the RMS Titanic (the 1912 ship) and do you want the total number of people aboard or just the number of passengers (excluding crew)?\n\nQuick answer: on the Titanic's maiden voyage there were about 2,224 people on board in total \u2014 commonly broken down as roughly 1,317 passengers and 907 crew. Sources vary slightly on the exact counts. I can give the precise breakdown by class and survival numbers if you want.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.75,
+              "explanation": "The Expected Answer is 100, but the Actual Answer does not state 100 and instead provides numbers like ~2,224 total people aboard or ~1,317 passengers. It also adds extraneous clarifications and mentions \"Total number of rows: 100,\" which is unrelated. Therefore it does not match the expected answer."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers were on the Titanic?\n\nExpected Answer: 100\nActual Answer: Do you mean the RMS Titanic (the 1912 ship) and do you want the total number of people aboard or just the number of passengers (excluding crew)?\n\nQuick answer: on the Titanic's maiden voyage there were about 2,224 people on board in total \u2014 commonly broken down as roughly 1,317 passengers and 907 crew. Sources vary slightly on the exact counts. I can give the precise breakdown by class and survival numbers if you want.\n\nReasoning: Total number of rows: 100\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The Expected Answer is 100, but the Actual Answer does not state 100 and instead provides numbers like ~2,224 total people aboard or ~1,317 passengers. It also adds extraneous clarifications and mentions \"Total number of rows: 100,\" which is unrelated. Therefore it does not match the expected answer.|0.75",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.75,
+                "explanation": "The Expected Answer is 100, but the Actual Answer does not state 100 and instead provides numbers like ~2,224 total people aboard or ~1,317 passengers. It also adds extraneous clarifications and mentions \"Total number of rows: 100,\" which is unrelated. Therefore it does not match the expected answer."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers were on the Titanic?\"\"\"\nexpected_answer = \"\"\"100\"\"\"\nactual_answer = \"\"\"Do you mean the RMS Titanic (the 1912 ship) and do you want the total number of people aboard or just the number of passengers (excluding crew)?\n\nQuick answer: on the Titanic's maiden voyage there were about 2,224 people on board in total \u2014 commonly broken down as roughly 1,317 passengers and 907 crew. Sources vary slightly on the exact counts. I can give the precise breakdown by class and survival numbers if you want.\"\"\"\nreasoning = \"\"\"Total number of rows: 100\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many passengers survived?",
+      "benchmark": {
+        "question": "How many passengers survived?",
+        "answer": "34",
+        "reasoning": "Count where survived=1: 34"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "34",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:14:49.788859] Starting PandasAI query\nQuestion: How many passengers survived?\nDataFrame shape: (100, 15)\n================================================================================\n\nAnswer: 34\n[2025-11-10T13:14:59.121717] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many passengers survived?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "34",
+            "framework_answer": "34",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers survived?\n\nExpected Answer: 34\nActual Answer: 34\n\nReasoning: Count where survived=1: 34\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers survived?\"\"\"\nexpected_answer = \"\"\"34\"\"\"\nactual_answer = \"\"\"34\"\"\"\nreasoning = \"\"\"Count where survived=1: 34\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\n\n- Total survivors (sum of 1s):\n  df['survived'].sum()\n\n- Counts per value:\n  df['survived'].value_counts()\n\nEither will give the exact number of passengers who survived.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:14:59.122165] Starting Real Sketch query\nQuestion: How many passengers survived?\nDataFrame shape: (100, 15)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\\n\\n- Total survivors (sum of 1s):\\n  df['survived'].sum()\\n\\n- Counts per value:\\n  df['survived'].value_counts()\\n\\nEither will give the exact number of passengers who survived.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\n\n- Total survivors (sum of 1s):\n  df['survived'].sum()\n\n- Counts per value:\n  df['survived'].value_counts()\n\nEither will give the exact number of passengers who survived.\n[2025-11-10T13:15:10.308768] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many passengers survived?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "34",
+            "framework_answer": "I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\n\n- Total survivors (sum of 1s):\n  df['survived'].sum()\n\n- Counts per value:\n  df['survived'].value_counts()\n\nEither will give the exact number of passengers who survived.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.62,
+              "explanation": "The expected answer is 34 survivors. The actual answer, while not explicitly stating 34, includes the reasoning \"Count where survived=1: 34,\" which matches the expected result and provides the correct count through its reasoning."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers survived?\n\nExpected Answer: 34\nActual Answer: I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\n\n- Total survivors (sum of 1s):\n  df['survived'].sum()\n\n- Counts per value:\n  df['survived'].value_counts()\n\nEither will give the exact number of passengers who survived.\n\nReasoning: Count where survived=1: 34\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The expected answer is 34 survivors. The actual answer, while not explicitly stating 34, includes the reasoning \"Count where survived=1: 34,\" which matches the expected result and provides the correct count through its reasoning.|0.62",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.62,
+                "explanation": "The expected answer is 34 survivors. The actual answer, while not explicitly stating 34, includes the reasoning \"Count where survived=1: 34,\" which matches the expected result and provides the correct count through its reasoning."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers survived?\"\"\"\nexpected_answer = \"\"\"34\"\"\"\nactual_answer = \"\"\"I can\u2019t determine the exact number of survivors from the summary alone (only quantiles and a few sample values are shown). To get the exact count, run either of these in Python:\n\n- Total survivors (sum of 1s):\n  df['survived'].sum()\n\n- Counts per value:\n  df['survived'].value_counts()\n\nEither will give the exact number of passengers who survived.\"\"\"\nreasoning = \"\"\"Count where survived=1: 34\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "34 passengers survived (34 out of 100; 66 did not survive).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:15:10.310224] Starting LangChain query\nQuestion: How many passengers survived?\nDataFrame shape: (100, 15)\nColumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: 34 passengers survived (34 out of 100; 66 did not survive).\n[2025-11-10T13:16:17.828547] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many passengers survived?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "34",
+            "framework_answer": "34 passengers survived (34 out of 100; 66 did not survive).",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Actual answer indicates 34 survived, which matches the expected 34. Additional context (34 out of 100; 66 did not survive) does not change the survival count."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many passengers survived?\n\nExpected Answer: 34\nActual Answer: 34 passengers survived (34 out of 100; 66 did not survive).\n\nReasoning: Count where survived=1: 34\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Actual answer indicates 34 survived, which matches the expected 34. Additional context (34 out of 100; 66 did not survive) does not change the survival count.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Actual answer indicates 34 survived, which matches the expected 34. Additional context (34 out of 100; 66 did not survive) does not change the survival count."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many passengers survived?\"\"\"\nexpected_answer = \"\"\"34\"\"\"\nactual_answer = \"\"\"34 passengers survived (34 out of 100; 66 did not survive).\"\"\"\nreasoning = \"\"\"Count where survived=1: 34\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the average age of passengers?",
+      "benchmark": {
+        "question": "What is the average age of passengers?",
+        "answer": "37.96",
+        "reasoning": "Mean of age column (excluding NaN): 37.96"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "37.96",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:16:32.006802] Starting PandasAI query\nQuestion: What is the average age of passengers?\nDataFrame shape: (100, 15)\n================================================================================\n\nAnswer: 37.96\n[2025-11-10T13:16:40.728318] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "37.96",
+            "framework_answer": "37.96",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average age of passengers?\n\nExpected Answer: 37.96\nActual Answer: 37.96\n\nReasoning: Mean of age column (excluding NaN): 37.96\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nexpected_answer = \"\"\"37.96\"\"\"\nactual_answer = \"\"\"37.96\"\"\"\nreasoning = \"\"\"Mean of age column (excluding NaN): 37.96\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\n\ndf['age'].mean()\n\nor equivalently:\n\ndf.age.mean()\n\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:16:40.728859] Starting Real Sketch query\nQuestion: What is the average age of passengers?\nDataFrame shape: (100, 15)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\\n\\ndf['age'].mean()\\n\\nor equivalently:\\n\\ndf.age.mean()\\n\\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\n\ndf['age'].mean()\n\nor equivalently:\n\ndf.age.mean()\n\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).\n[2025-11-10T13:16:48.612339] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "37.96",
+            "framework_answer": "I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\n\ndf['age'].mean()\n\nor equivalently:\n\ndf.age.mean()\n\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.62,
+              "explanation": "The Expected Answer provides the numeric result 37.96. The Actual Answer does not present this number directly; it claims the mean can\u2019t be determined from the summary and asks for data, only mentioning 37.96 within a reasoning note. Therefore, it does not match the expected numeric answer."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average age of passengers?\n\nExpected Answer: 37.96\nActual Answer: I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\n\ndf['age'].mean()\n\nor equivalently:\n\ndf.age.mean()\n\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).\n\nReasoning: Mean of age column (excluding NaN): 37.96\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The Expected Answer provides the numeric result 37.96. The Actual Answer does not present this number directly; it claims the mean can\u2019t be determined from the summary and asks for data, only mentioning 37.96 within a reasoning note. Therefore, it does not match the expected numeric answer.|0.62",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.62,
+                "explanation": "The Expected Answer provides the numeric result 37.96. The Actual Answer does not present this number directly; it claims the mean can\u2019t be determined from the summary and asks for data, only mentioning 37.96 within a reasoning note. Therefore, it does not match the expected numeric answer."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nexpected_answer = \"\"\"37.96\"\"\"\nactual_answer = \"\"\"I can\u2019t tell the exact average age from the summary you gave because the mean isn\u2019t included there and the individual ages aren\u2019t listed. You can compute it directly in pandas (NaNs ignored) with:\n\ndf['age'].mean()\n\nor equivalently:\n\ndf.age.mean()\n\nIf you want me to compute it, either paste the age column values or provide the dataframe (or run the command and share the result).\"\"\"\nreasoning = \"\"\"Mean of age column (excluding NaN): 37.96\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average age of passengers is 37.96 years.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:16:48.613692] Starting LangChain query\nQuestion: What is the average age of passengers?\nDataFrame shape: (100, 15)\nColumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n================================================================================\n\nAgent created, executing query...\nshape: (100, 15)\ncolumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\nshape: (100, 15)\ncolumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n\nFirst 5 rows:\n   survived  pclass     sex   age  ...  deck  embark_town  alive  alone\n0         0       1    male  47.0  ...     B  Southampton     no   True\n1         1       3    male   NaN  ...     A  Southampton     no   True\n2         1       2    male  40.0  ...  None   Queenstown     no  False\n3         0       3  female  52.0  ...     A  Southampton    yes   True\n4         0       3    male  16.0  ...     B    Cherbourg    yes  False\n\n[5 rows x 15 columns]\n\nAnswer: The average age of passengers is 37.96 years.\n[2025-11-10T13:17:11.309804] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "37.96",
+            "framework_answer": "The average age of passengers is 37.96 years.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.95,
+              "explanation": "Numeric value matches: 37.96; actual includes the same mean with contextual wording and units (\"years\"), which does not change the value"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average age of passengers?\n\nExpected Answer: 37.96\nActual Answer: The average age of passengers is 37.96 years.\n\nReasoning: Mean of age column (excluding NaN): 37.96\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Numeric value matches: 37.96; actual includes the same mean with contextual wording and units (\"years\"), which does not change the value|0.95",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.95,
+                "explanation": "Numeric value matches: 37.96; actual includes the same mean with contextual wording and units (\"years\"), which does not change the value"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average age of passengers?\"\"\"\nexpected_answer = \"\"\"37.96\"\"\"\nactual_answer = \"\"\"The average age of passengers is 37.96 years.\"\"\"\nreasoning = \"\"\"Mean of age column (excluding NaN): 37.96\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the maximum fare paid?",
+      "benchmark": {
+        "question": "What is the maximum fare paid?",
+        "answer": "188.74",
+        "reasoning": "Maximum fare value: 188.74"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "188.74",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:17:25.337402] Starting PandasAI query\nQuestion: What is the maximum fare paid?\nDataFrame shape: (100, 15)\n================================================================================\n\nAnswer: 188.74\n[2025-11-10T13:17:34.991457] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "188.74",
+            "framework_answer": "188.74",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum fare paid?\n\nExpected Answer: 188.74\nActual Answer: 188.74\n\nReasoning: Maximum fare value: 188.74\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nexpected_answer = \"\"\"188.74\"\"\"\nactual_answer = \"\"\"188.74\"\"\"\nreasoning = \"\"\"Maximum fare value: 188.74\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "188.74",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:17:34.991902] Starting Real Sketch query\nQuestion: What is the maximum fare paid?\nDataFrame shape: (100, 15)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n188.74\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 188.74\n[2025-11-10T13:17:39.108029] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "188.74",
+            "framework_answer": "188.74",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum fare paid?\n\nExpected Answer: 188.74\nActual Answer: 188.74\n\nReasoning: Maximum fare value: 188.74\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nexpected_answer = \"\"\"188.74\"\"\"\nactual_answer = \"\"\"188.74\"\"\"\nreasoning = \"\"\"Maximum fare value: 188.74\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The maximum fare paid is 188.74.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:17:39.109372] Starting LangChain query\nQuestion: What is the maximum fare paid?\nDataFrame shape: (100, 15)\nColumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The maximum fare paid is 188.74.\n[2025-11-10T13:17:46.583246] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "188.74",
+            "framework_answer": "The maximum fare paid is 188.74.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states the maximum fare paid as 188.74, which matches the expected value exactly; extraneous wording does not affect correctness."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the maximum fare paid?\n\nExpected Answer: 188.74\nActual Answer: The maximum fare paid is 188.74.\n\nReasoning: Maximum fare value: 188.74\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states the maximum fare paid as 188.74, which matches the expected value exactly; extraneous wording does not affect correctness.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states the maximum fare paid as 188.74, which matches the expected value exactly; extraneous wording does not affect correctness."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the maximum fare paid?\"\"\"\nexpected_answer = \"\"\"188.74\"\"\"\nactual_answer = \"\"\"The maximum fare paid is 188.74.\"\"\"\nreasoning = \"\"\"Maximum fare value: 188.74\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many male passengers were there?",
+      "benchmark": {
+        "question": "How many male passengers were there?",
+        "answer": "63",
+        "reasoning": "Count where sex='male': 63"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "63",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:17:50.739839] Starting PandasAI query\nQuestion: How many male passengers were there?\nDataFrame shape: (100, 15)\n================================================================================\n\nAnswer: 63\n[2025-11-10T13:17:58.043385] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many male passengers were there?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "63",
+            "framework_answer": "63",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many male passengers were there?\n\nExpected Answer: 63\nActual Answer: 63\n\nReasoning: Count where sex='male': 63\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many male passengers were there?\"\"\"\nexpected_answer = \"\"\"63\"\"\"\nactual_answer = \"\"\"63\"\"\"\nreasoning = \"\"\"Count where sex='male': 63\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t tell the exact number from the summary you provided because it doesn't include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\n\n- df['sex'].value_counts()  # shows counts for 'male' and 'female'\n- df['sex'].eq('male').sum()  # returns just the male count\n\nRun one of those on your dataframe and it will give the exact number.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:17:58.043847] Starting Real Sketch query\nQuestion: How many male passengers were there?\nDataFrame shape: (100, 15)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'I can\u2019t tell the exact number from the summary you provided because it doesn\\'t include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\\n\\n- df[\\'sex\\'].value_counts()  # shows counts for \\'male\\' and \\'female\\'\\n- df[\\'sex\\'].eq(\\'male\\').sum()  # returns just the male count\\n\\nRun one of those on your dataframe and it will give the exact number.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t tell the exact number from the summary you provided because it doesn't include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\n\n- df['sex'].value_counts()  # shows counts for 'male' and 'female'\n- df['sex'].eq('male').sum()  # returns just the male count\n\nRun one of those on your dataframe and it will give the exact number.\n[2025-11-10T13:18:07.324006] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many male passengers were there?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "63",
+            "framework_answer": "I can\u2019t tell the exact number from the summary you provided because it doesn't include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\n\n- df['sex'].value_counts()  # shows counts for 'male' and 'female'\n- df['sex'].eq('male').sum()  # returns just the male count\n\nRun one of those on your dataframe and it will give the exact number.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.72,
+              "explanation": "The actual answer ultimately yields the correct count (63) and explains how to compute it; the number 63 appears in the reasoning, making it semantically equivalent to the expected answer, despite not being stated as a standalone final value."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many male passengers were there?\n\nExpected Answer: 63\nActual Answer: I can\u2019t tell the exact number from the summary you provided because it doesn't include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\n\n- df['sex'].value_counts()  # shows counts for 'male' and 'female'\n- df['sex'].eq('male').sum()  # returns just the male count\n\nRun one of those on your dataframe and it will give the exact number.\n\nReasoning: Count where sex='male': 63\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer ultimately yields the correct count (63) and explains how to compute it; the number 63 appears in the reasoning, making it semantically equivalent to the expected answer, despite not being stated as a standalone final value.|0.72",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.72,
+                "explanation": "The actual answer ultimately yields the correct count (63) and explains how to compute it; the number 63 appears in the reasoning, making it semantically equivalent to the expected answer, despite not being stated as a standalone final value."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many male passengers were there?\"\"\"\nexpected_answer = \"\"\"63\"\"\"\nactual_answer = \"\"\"I can\u2019t tell the exact number from the summary you provided because it doesn't include the per-category counts for the \"sex\" column. To get the number of male passengers, run either:\n\n- df['sex'].value_counts()  # shows counts for 'male' and 'female'\n- df['sex'].eq('male').sum()  # returns just the male count\n\nRun one of those on your dataframe and it will give the exact number.\"\"\"\nreasoning = \"\"\"Count where sex='male': 63\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 63 male passengers.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:18:07.325155] Starting LangChain query\nQuestion: How many male passengers were there?\nDataFrame shape: (100, 15)\nColumns: ['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'fare', 'embarked', 'class', 'who', 'adult_male', 'deck', 'embark_town', 'alive', 'alone']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: There are 63 male passengers.\n[2025-11-10T13:18:19.448410] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nsurvived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many male passengers were there?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "63",
+            "framework_answer": "There are 63 male passengers.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states 63 male passengers, matching the expected numeric value exactly. It is merely phrased as a sentence and is semantically equivalent; no precision or rounding issues."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many male passengers were there?\n\nExpected Answer: 63\nActual Answer: There are 63 male passengers.\n\nReasoning: Count where sex='male': 63\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states 63 male passengers, matching the expected numeric value exactly. It is merely phrased as a sentence and is semantically equivalent; no precision or rounding issues.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states 63 male passengers, matching the expected numeric value exactly. It is merely phrased as a sentence and is semantically equivalent; no precision or rounding issues."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many male passengers were there?\"\"\"\nexpected_answer = \"\"\"63\"\"\"\nactual_answer = \"\"\"There are 63 male passengers.\"\"\"\nreasoning = \"\"\"Count where sex='male': 63\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "survived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone\n0,1,male,47.0,0,0,16.36,S,Third,man,False,B,Southampton,no,True\n1,3,male,,1,0,38.28,S,Third,woman,False,A,Southampton,no,True\n1,2,male,40.0,0,0,6.35,Q,First,child,False,,Queenstown,no,False\n0,3,female,52.0,0,0,38.16,S,First,man,False,A,Southampton,yes,True\n0,3,male,16.0,0,0,16.97,S,Second,woman,False,B,Cherbourg,yes,False\n0,2,male,13.0,1,0,66.37,S,Third,child,True,D,Cherbourg,no,False\n0,2,male,30.0,0,0,23.17,S,Third,man,True,,Southampton,no,True\n1,3,female,19.0,0,0,115.71,C,First,woman,True,,Cherbourg,no,False\n0,1,male,17.0,0,0,29.48,S,Third,child,True,,Southampton,no,False\n1,1,male,,1,0,8.11,S,Third,man,False,,Southampton,no,True\n0,2,male,19.0,0,0,55.19,S,First,woman,False,,Southampton,no,False\n1,1,female,58.0,0,0,13.54,S,Third,child,False,B,Southampton,no,True\n1,3,female,55.0,0,0,13.67,S,Third,man,True,,Queenstown,yes,False\n0,3,male,62.0,0,0,1.03,S,Second,woman,False,,Southampton,no,False\n0,3,female,23.0,0,0,25.46,S,First,child,False,,Southampton,yes,True\n0,3,male,9.0,0,0,24.46,S,First,man,False,,Southampton,no,False\n0,3,male,12.0,0,0,14.08,Q,First,woman,False,,Queenstown,yes,False\n0,1,female,1.0,0,0,71.88,S,Third,child,False,,Southampton,yes,False\n0,3,male,58.0,2,2,4.41,C,Third,man,True,,Southampton,yes,False\n0,3,female,,1,0,12.82,C,First,woman,False,,Southampton,no,False\n0,3,female,34.0,0,0,12.42,C,First,child,True,,Southampton,no,True\n0,3,male,48.0,2,2,3.1,C,First,man,True,,Southampton,yes,False\n0,2,male,1.0,0,0,21.0,S,First,woman,False,B,Southampton,no,True\n0,1,male,,0,1,37.25,S,Third,child,True,,Southampton,no,True\n0,1,male,61.0,0,0,22.94,S,Second,man,False,A,Cherbourg,no,False\n1,2,male,64.0,0,0,5.46,C,Second,woman,True,,Southampton,yes,True\n0,3,female,63.0,0,0,15.16,S,First,child,False,,Southampton,no,True\n0,3,male,69.0,0,1,0.08,S,Third,man,True,,Southampton,no,True\n0,1,female,22.0,0,0,64.87,S,Second,woman,False,F,Southampton,yes,True\n0,3,male,67.0,0,3,2.83,S,Third,child,False,D,Queenstown,yes,False\n0,2,female,76.0,2,0,29.1,S,First,man,True,B,Southampton,no,True\n0,1,male,26.0,1,0,137.19,Q,Third,woman,True,,Cherbourg,no,False\n0,1,male,16.0,0,0,24.61,S,Third,child,False,C,Southampton,yes,True\n1,2,male,51.0,2,1,82.48,S,First,man,True,B,Cherbourg,no,False\n1,3,male,57.0,3,0,8.62,S,Second,woman,True,F,Southampton,no,True\n1,2,female,29.0,4,0,45.66,C,Third,child,True,,Southampton,no,True\n0,3,male,78.0,0,0,24.25,S,Third,man,True,,Southampton,no,False\n0,3,male,69.0,1,0,40.79,S,Third,woman,False,B,Southampton,no,False\n1,2,male,47.0,0,0,2.06,S,Third,child,False,F,Queenstown,no,True\n0,3,male,,1,0,5.12,S,Third,man,True,,Cherbourg,yes,True\n0,3,female,69.0,3,0,4.57,S,Third,woman,True,,Southampton,yes,True\n0,2,female,76.0,1,0,37.19,C,First,child,False,,Cherbourg,no,True\n0,3,female,16.0,1,0,59.54,Q,Third,man,True,E,Southampton,no,False\n1,2,male,48.0,1,2,44.31,S,Second,woman,True,,Southampton,yes,True\n0,2,male,39.0,1,0,0.99,S,Third,child,False,G,Cherbourg,no,True\n1,1,female,33.0,0,0,64.61,S,First,man,False,,Southampton,no,True\n0,3,male,23.0,0,0,13.99,S,First,woman,False,,Southampton,no,True\n0,3,female,10.0,0,0,16.2,S,Second,child,False,F,Cherbourg,no,True\n0,1,female,,1,0,3.55,S,Third,man,True,E,Southampton,no,True\n0,2,female,34.0,0,0,42.79,S,Second,woman,False,,Southampton,yes,True\n1,3,male,52.0,0,0,6.44,S,First,child,True,,Southampton,yes,True\n1,1,male,10.0,0,0,26.56,S,First,man,True,,Southampton,yes,False\n1,1,female,19.0,0,0,58.78,S,Third,woman,True,,Southampton,yes,True\n1,3,male,58.0,1,1,2.99,S,Third,child,True,,Southampton,no,False\n0,3,male,1.0,1,0,24.53,S,Third,man,False,,Southampton,no,True\n1,2,male,,0,0,8.5,S,Third,woman,True,F,Southampton,yes,False\n0,3,female,4.0,1,0,13.44,S,Third,child,True,,Southampton,no,False\n0,3,female,16.0,0,0,20.56,S,Third,man,True,E,Southampton,yes,False\n0,1,male,,0,0,14.04,C,First,woman,True,F,Queenstown,no,False\n0,3,male,2.0,1,0,33.49,Q,Second,child,False,,Cherbourg,no,True\n0,2,male,32.0,0,1,20.9,S,Second,man,True,A,Cherbourg,yes,True\n0,3,female,24.0,0,0,28.08,S,Second,woman,False,C,Southampton,no,True\n1,3,male,,1,1,42.72,S,Second,child,True,E,Queenstown,yes,True\n0,3,male,,0,2,26.11,S,Third,man,True,,Southampton,no,True\n0,1,female,35.0,0,0,28.26,S,Second,woman,False,B,Cherbourg,no,True\n0,3,female,33.0,0,1,26.6,C,Third,child,True,A,Southampton,yes,False\n0,2,female,33.0,0,0,15.23,S,Third,man,False,B,Cherbourg,no,True\n1,1,female,,0,0,13.17,S,Second,woman,True,B,Southampton,yes,False\n0,1,male,51.0,0,0,73.57,S,Third,child,True,A,Southampton,yes,False\n1,3,male,,1,1,29.93,S,Third,man,False,F,Southampton,no,False\n1,3,female,,1,0,8.97,S,Second,woman,True,,Southampton,yes,True\n0,1,female,67.0,1,1,22.07,S,Third,child,True,D,Cherbourg,no,True\n0,3,female,65.0,1,2,12.83,S,Third,man,False,E,Southampton,no,True\n1,1,female,33.0,1,0,86.83,S,Third,woman,True,B,Queenstown,no,True\n1,3,male,40.0,0,3,0.24,C,Third,child,False,D,Southampton,yes,False\n1,1,male,74.0,0,0,8.17,Q,Third,man,True,,Cherbourg,no,True\n1,3,female,43.0,0,0,14.55,S,Third,woman,False,,Southampton,no,False\n0,2,male,,0,0,21.41,S,First,child,False,A,Southampton,no,True\n0,3,female,,0,0,60.88,S,Second,man,False,F,Queenstown,no,False\n0,1,female,13.0,0,0,2.94,C,First,woman,False,D,Queenstown,no,False\n1,2,female,12.0,1,0,52.45,S,Third,child,True,,Cherbourg,no,True\n1,1,male,46.0,3,0,1.83,S,Second,man,False,,Southampton,no,True\n0,3,male,2.0,0,2,59.11,S,Third,woman,True,,Southampton,no,True\n0,3,male,35.0,0,0,1.7,S,Third,child,True,D,Cherbourg,no,True\n0,2,male,8.0,0,0,0.59,S,Third,man,True,,Southampton,no,True\n0,3,male,,2,0,38.2,S,Third,woman,True,A,Cherbourg,no,True\n1,3,male,74.0,2,1,188.74,S,Third,child,True,B,Southampton,yes,True\n1,3,male,,0,0,72.62,S,Third,man,False,E,Cherbourg,yes,True\n1,3,male,,1,1,27.46,S,Second,woman,False,B,Southampton,no,True\n0,2,male,68.0,0,1,79.8,C,Third,child,False,,Cherbourg,yes,False\n0,1,male,,0,0,0.17,S,Second,man,True,,Southampton,no,True\n1,3,male,75.0,0,0,118.13,S,First,woman,False,C,Southampton,yes,False\n1,3,female,29.0,0,0,21.59,S,Third,child,True,,Southampton,yes,True\n0,3,male,36.0,4,0,41.07,S,Third,man,True,,Cherbourg,no,True\n1,2,male,21.0,1,0,55.03,S,Second,woman,True,,Southampton,no,False\n0,2,male,36.0,0,0,40.56,S,Third,child,True,,Southampton,yes,True\n0,3,female,10.0,1,0,24.51,S,Third,man,False,,Cherbourg,no,True\n0,3,male,73.0,2,0,20.72,Q,Third,woman,True,,Southampton,no,True\n0,3,male,24.0,2,0,58.36,S,Third,child,True,,Southampton,yes,True\n0,3,male,64.0,0,0,7.34,S,Third,man,True,B,Cherbourg,no,True\n"
+}

@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "dataset_name": "happiness",
+    "timestamp": "20251110_132202",
+    "total_questions": 4,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "Which country has the highest happiness score?",
+      "benchmark": {
+        "question": "Which country has the highest happiness score?",
+        "answer": "Finland",
+        "reasoning": "Country with max Happiness_Score: Finland"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "The country with the highest happiness score is Finland with a score of 7.842.",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:18:43.919389] Starting PandasAI query\nQuestion: Which country has the highest happiness score?\nDataFrame shape: (20, 7)\n================================================================================\n2025-11-10 13:18:43 [INFO] Question: Which country has the highest happiness score?\n2025-11-10 13:18:43 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 13:18:43 [INFO] Prompt ID: dce1bfe2-48fc-4d06-b89f-4f03fe54166d\n2025-11-10 13:18:43 [INFO] Generating new code...\n2025-11-10 13:18:43 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_c3a458e83de81ab2aad5a2e487cfba03\" columns=\"[{\"name\": \"Country\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"Happiness_Score\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"GDP_per_capita\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"Social_support\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"Healthy_life_expectancy\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"Freedom\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"Region\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"20x7\">\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n Which country has the highest happiness score?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 13:18:53 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Query to find the country with the highest happiness score using SQL (sorting + LIMIT)\nsql_query = \"\"\"\nSELECT Country, Happiness_Score\nFROM table_c3a458e83de81ab2aad5a2e487cfba03\nORDER BY Happiness_Score DESC\nLIMIT 1;\n\"\"\"\n\n# Execute the query (function provided externally)\ntop_country_df = execute_sql_query(sql_query)\n\n# Prepare result\nif top_country_df is None or top_country_df.empty:\n    result = { \"type\": \"string\", \"value\": \"No data returned from the query.\" }\nelse:\n    country = top_country_df.loc[0, \"Country\"]\n    score = top_country_df.loc[0, \"Happiness_Score\"]\n    result = { \"type\": \"string\", \"value\": f\"The country with the highest happiness score is {country} with a score of {score}.\" }\n\n# result variable required by the prompt\n2025-11-10 13:18:53 [INFO] Validating code requirements...\n2025-11-10 13:18:53 [INFO] Code validation successful.\n2025-11-10 13:18:53 [INFO] Cleaning the generated code...\n2025-11-10 13:18:53 [INFO] Executing code: import pandas as pd\nsql_query = \"\"\"\nSELECT Country, Happiness_Score\nFROM table_c3a458e83de81ab2aad5a2e487cfba03\nORDER BY Happiness_Score DESC\nLIMIT 1;\n\"\"\"\ntop_country_df = execute_sql_query(sql_query)\nif top_country_df is None or top_country_df.empty:\n    result = {'type': 'string', 'value': 'No data returned from the query.'}\nelse:\n    country = top_country_df.loc[0, 'Country']\n    score = top_country_df.loc[0, 'Happiness_Score']\n    result = {'type': 'string', 'value': f'The country with the highest happiness score is {country} with a score of {score}.'}\n2025-11-10 13:18:53 [INFO] Response generated successfully.\n\nAnswer: The country with the highest happiness score is Finland with a score of 7.842.\n[2025-11-10T13:18:53.421757] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "Finland",
+            "framework_answer": "The country with the highest happiness score is Finland with a score of 7.842.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Both answers identify Finland as the country with the highest happiness score; the actual answer also provides the score (7.842), which is additional but consistent with the claim"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the highest happiness score?\n\nExpected Answer: Finland\nActual Answer: The country with the highest happiness score is Finland with a score of 7.842.\n\nReasoning: Country with max Happiness_Score: Finland\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both answers identify Finland as the country with the highest happiness score; the actual answer also provides the score (7.842), which is additional but consistent with the claim|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Both answers identify Finland as the country with the highest happiness score; the actual answer also provides the score (7.842), which is additional but consistent with the claim"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nexpected_answer = \"\"\"Finland\"\"\"\nactual_answer = \"\"\"The country with the highest happiness score is Finland with a score of 7.842.\"\"\"\nreasoning = \"\"\"Country with max Happiness_Score: Finland\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "Finland",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:18:53.422098] Starting Real Sketch query\nQuestion: Which country has the highest happiness score?\nDataFrame shape: (20, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\nFinland\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: Finland\n[2025-11-10T13:18:56.679172] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "Finland",
+            "framework_answer": "Finland",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the highest happiness score?\n\nExpected Answer: Finland\nActual Answer: Finland\n\nReasoning: Country with max Happiness_Score: Finland\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nexpected_answer = \"\"\"Finland\"\"\"\nactual_answer = \"\"\"Finland\"\"\"\nreasoning = \"\"\"Country with max Happiness_Score: Finland\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "Finland has the highest happiness score: 7.842.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:18:56.680684] Starting LangChain query\nQuestion: Which country has the highest happiness score?\nDataFrame shape: (20, 7)\nColumns: ['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n================================================================================\n\nAgent created, executing query...\n<class 'pandas.core.frame.DataFrame'>\nRangeIndex: 20 entries, 0 to 19\nData columns (total 7 columns):\n #   Column                   Non-Null Count  Dtype  \n---  ------                   --------------  -----  \n 0   Country                  20 non-null     object \n 1   Happiness_Score          20 non-null     float64\n 2   GDP_per_capita           20 non-null     float64\n 3   Social_support           20 non-null     float64\n 4   Healthy_life_expectancy  20 non-null     float64\n 5   Freedom                  20 non-null     float64\n 6   Region                   20 non-null     object \ndtypes: float64(5), object(2)\nmemory usage: 1.2+ KB\n\nAnswer: Finland has the highest happiness score: 7.842.\n[2025-11-10T13:19:05.573849] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "Finland",
+            "framework_answer": "Finland has the highest happiness score: 7.842.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Both indicate Finland is the country with the highest happiness score; the Actual Answer adds the precise score (7.842) but the semantic conclusion matches the Expected Answer. Formatting/precision differences are acceptable."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the highest happiness score?\n\nExpected Answer: Finland\nActual Answer: Finland has the highest happiness score: 7.842.\n\nReasoning: Country with max Happiness_Score: Finland\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both indicate Finland is the country with the highest happiness score; the Actual Answer adds the precise score (7.842) but the semantic conclusion matches the Expected Answer. Formatting/precision differences are acceptable.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Both indicate Finland is the country with the highest happiness score; the Actual Answer adds the precise score (7.842) but the semantic conclusion matches the Expected Answer. Formatting/precision differences are acceptable."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the highest happiness score?\"\"\"\nexpected_answer = \"\"\"Finland\"\"\"\nactual_answer = \"\"\"Finland has the highest happiness score: 7.842.\"\"\"\nreasoning = \"\"\"Country with max Happiness_Score: Finland\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the average happiness score?",
+      "benchmark": {
+        "question": "What is the average happiness score?",
+        "answer": "7.218",
+        "reasoning": "Mean of Happiness_Score: 7.218"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "7.218",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:19:15.779242] Starting PandasAI query\nQuestion: What is the average happiness score?\nDataFrame shape: (20, 7)\n================================================================================\n\nAnswer: 7.218\n[2025-11-10T13:19:29.884142] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average happiness score?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "7.218",
+            "framework_answer": "7.218",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average happiness score?\n\nExpected Answer: 7.218\nActual Answer: 7.218\n\nReasoning: Mean of Happiness_Score: 7.218\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average happiness score?\"\"\"\nexpected_answer = \"\"\"7.218\"\"\"\nactual_answer = \"\"\"7.218\"\"\"\nreasoning = \"\"\"Mean of Happiness_Score: 7.218\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "The average (mean) Happiness_Score is approximately 7.24.\n\nYou can compute it in pandas with:\n```python\ndf['Happiness_Score'].mean()\n```",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:19:29.884641] Starting Real Sketch query\nQuestion: What is the average happiness score?\nDataFrame shape: (20, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"The average (mean) Happiness_Score is approximately 7.24.\\n\\nYou can compute it in pandas with:\\n```python\\ndf['Happiness_Score'].mean()\\n```\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: The average (mean) Happiness_Score is approximately 7.24.\n\nYou can compute it in pandas with:\n```python\ndf['Happiness_Score'].mean()\n```\n[2025-11-10T13:19:39.177701] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average happiness score?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "7.218",
+            "framework_answer": "The average (mean) Happiness_Score is approximately 7.24.\n\nYou can compute it in pandas with:\n```python\ndf['Happiness_Score'].mean()\n```",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.7,
+              "explanation": ""
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average happiness score?\n\nExpected Answer: 7.218\nActual Answer: The average (mean) Happiness_Score is approximately 7.24.\n\nYou can compute it in pandas with:\n```python\ndf['Happiness_Score'].mean()\n```\n\nReasoning: Mean of Happiness_Score: 7.218\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.7,
+                "explanation": ""
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average happiness score?\"\"\"\nexpected_answer = \"\"\"7.218\"\"\"\nactual_answer = \"\"\"The average (mean) Happiness_Score is approximately 7.24.\n\nYou can compute it in pandas with:\n```python\ndf['Happiness_Score'].mean()\n```\"\"\"\nreasoning = \"\"\"Mean of Happiness_Score: 7.218\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average (mean) Happiness_Score is 7.218.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:19:39.181858] Starting LangChain query\nQuestion: What is the average happiness score?\nDataFrame shape: (20, 7)\nColumns: ['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The average (mean) Happiness_Score is 7.218.\n[2025-11-10T13:19:47.336874] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average happiness score?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "7.218",
+            "framework_answer": "The average (mean) Happiness_Score is 7.218.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer states the mean Happiness_Score is 7.218, which matches the expected numeric value exactly; formatting differs but semantic meaning is the same."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average happiness score?\n\nExpected Answer: 7.218\nActual Answer: The average (mean) Happiness_Score is 7.218.\n\nReasoning: Mean of Happiness_Score: 7.218\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer states the mean Happiness_Score is 7.218, which matches the expected numeric value exactly; formatting differs but semantic meaning is the same.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer states the mean Happiness_Score is 7.218, which matches the expected numeric value exactly; formatting differs but semantic meaning is the same."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average happiness score?\"\"\"\nexpected_answer = \"\"\"7.218\"\"\"\nactual_answer = \"\"\"The average (mean) Happiness_Score is 7.218.\"\"\"\nreasoning = \"\"\"Mean of Happiness_Score: 7.218\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many countries are from Western Europe?",
+      "benchmark": {
+        "question": "How many countries are from Western Europe?",
+        "answer": "13",
+        "reasoning": "Count where Region='Western Europe': 13"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "13",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:20:04.929479] Starting PandasAI query\nQuestion: How many countries are from Western Europe?\nDataFrame shape: (20, 7)\n================================================================================\n\nAnswer: 13\n[2025-11-10T13:20:12.795937] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "13",
+            "framework_answer": "13",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many countries are from Western Europe?\n\nExpected Answer: 13\nActual Answer: 13\n\nReasoning: Count where Region='Western Europe': 13\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nexpected_answer = \"\"\"13\"\"\"\nactual_answer = \"\"\"13\"\"\"\nreasoning = \"\"\"Count where Region='Western Europe': 13\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\n\n- df['Region'].value_counts().get('Western Europe', 0)\n- (df['Region'] == 'Western Europe').sum()\n- df[df['Region'] == 'Western Europe'].shape[0]\n\nNote: from the head sample at least 5 countries are from Western Europe.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:20:12.796420] Starting Real Sketch query\nQuestion: How many countries are from Western Europe?\nDataFrame shape: (20, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\\n\\n- df[\\'Region\\'].value_counts().get(\\'Western Europe\\', 0)\\n- (df[\\'Region\\'] == \\'Western Europe\\').sum()\\n- df[df[\\'Region\\'] == \\'Western Europe\\'].shape[0]\\n\\nNote: from the head sample at least 5 countries are from Western Europe.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\n\n- df['Region'].value_counts().get('Western Europe', 0)\n- (df['Region'] == 'Western Europe').sum()\n- df[df['Region'] == 'Western Europe'].shape[0]\n\nNote: from the head sample at least 5 countries are from Western Europe.\n[2025-11-10T13:20:27.271306] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "13",
+            "framework_answer": "I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\n\n- df['Region'].value_counts().get('Western Europe', 0)\n- (df['Region'] == 'Western Europe').sum()\n- df[df['Region'] == 'Western Europe'].shape[0]\n\nNote: from the head sample at least 5 countries are from Western Europe.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.7,
+              "explanation": "The answer ultimately conveys the correct count (13) via the reasoning line and provides valid methods to compute it; formatting differs but semantic value matches"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many countries are from Western Europe?\n\nExpected Answer: 13\nActual Answer: I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\n\n- df['Region'].value_counts().get('Western Europe', 0)\n- (df['Region'] == 'Western Europe').sum()\n- df[df['Region'] == 'Western Europe'].shape[0]\n\nNote: from the head sample at least 5 countries are from Western Europe.\n\nReasoning: Count where Region='Western Europe': 13\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The answer ultimately conveys the correct count (13) via the reasoning line and provides valid methods to compute it; formatting differs but semantic value matches|0.70",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.7,
+                "explanation": "The answer ultimately conveys the correct count (13) via the reasoning line and provides valid methods to compute it; formatting differs but semantic value matches"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nexpected_answer = \"\"\"13\"\"\"\nactual_answer = \"\"\"I can\u2019t tell the exact count from the summary alone \u2014 it only shows the first five rows (all \"Western Europe\") and the unique region count. To get the exact number run one of these in Python:\n\n- df['Region'].value_counts().get('Western Europe', 0)\n- (df['Region'] == 'Western Europe').sum()\n- df[df['Region'] == 'Western Europe'].shape[0]\n\nNote: from the head sample at least 5 countries are from Western Europe.\"\"\"\nreasoning = \"\"\"Count where Region='Western Europe': 13\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "There are 13 countries from Western Europe.\n\nThey are: Finland, Denmark, Switzerland, Iceland, Netherlands, Norway, Sweden, Luxembourg, Austria, Germany, Ireland, United Kingdom, Belgium.\n\n(Count determined from the dataset's \"Region\" column \u2014 let me know if you want a different regional definition or a downloadable list.)",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:20:27.272732] Starting LangChain query\nQuestion: How many countries are from Western Europe?\nDataFrame shape: (20, 7)\nColumns: ['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n================================================================================\n\nAgent created, executing query...\n(20, 7)\n['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n|    | Country     |   Happiness_Score |   GDP_per_capita |   Social_support |   Healthy_life_expectancy |   Freedom | Region         |\n|---:|:------------|------------------:|-----------------:|-----------------:|--------------------------:|----------:|:---------------|\n|  0 | Finland     |             7.842 |            1.892 |            1.587 |                     0.986 |     0.596 | Western Europe |\n|  1 | Denmark     |             7.62  |            1.868 |            1.573 |                     0.996 |     0.592 | Western Europe |\n|  2 | Switzerland |             7.571 |            1.847 |            1.566 |                     1.052 |     0.572 | Western Europe |\n|  3 | Iceland     |             7.554 |            1.786 |            1.624 |                     1.026 |     0.591 | Western Europe |\n|  4 | Netherlands |             7.464 |            1.825 |            1.548 |                     0.999 |     0.557 | Western Europe |\n\nColumn: Country (unique=20)\n| Country        |   count |\n|:---------------|--------:|\n| Finland        |       1 |\n| Denmark        |       1 |\n| United States  |       1 |\n| Czech Republic |       1 |\n| United Kingdom |       1 |\n| Costa Rica     |       1 |\n| Ireland        |       1 |\n| Canada         |       1 |\n| Germany        |       1 |\n| Israel         |       1 |\n| Australia      |       1 |\n| Austria        |       1 |\n| New Zealand    |       1 |\n| Luxembourg     |       1 |\n| Sweden         |       1 |\n| Norway         |       1 |\n| Netherlands    |       1 |\n| Iceland        |       1 |\n| Switzerland    |       1 |\n| Belgium        |       1 |\n\nColumn: Happiness_Score (unique=20)\n|   Happiness_Score |   count |\n|------------------:|--------:|\n|             7.842 |       1 |\n|             7.62  |       1 |\n|             6.892 |       1 |\n|             6.711 |       1 |\n|             6.814 |       1 |\n|             6.93  |       1 |\n|             6.977 |       1 |\n|             7.025 |       1 |\n|             7.076 |       1 |\n|             7.19  |       1 |\n|             7.228 |       1 |\n|             7.246 |       1 |\n|             7.277 |       1 |\n|             7.324 |       1 |\n|             7.363 |       1 |\n|             7.392 |       1 |\n|             7.464 |       1 |\n|             7.554 |       1 |\n|             7.571 |       1 |\n|             6.864 |       1 |\n\nColumn: GDP_per_capita (unique=19)\n|   GDP_per_capita |   count |\n|-----------------:|--------:|\n|            1.789 |       2 |\n|            1.892 |       1 |\n|            1.716 |       1 |\n|            1.69  |       1 |\n|            1.744 |       1 |\n|            1.434 |       1 |\n|            1.885 |       1 |\n|            1.706 |       1 |\n|            1.793 |       1 |\n|            1.65  |       1 |\n|            1.81  |       1 |\n|            1.868 |       1 |\n|            1.696 |       1 |\n|            1.944 |       1 |\n|            1.83  |       1 |\n|            1.825 |       1 |\n|            1.786 |       1 |\n|            1.847 |       1 |\n|            1.82  |       1 |\n\nColumn: Social_support (unique=18)\n|   Social_support |   count |\n|-----------------:|--------:|\n|            1.548 |       2 |\n|            1.573 |       2 |\n|            1.587 |       1 |\n|            1.608 |       1 |\n|            1.48  |       1 |\n|            1.537 |       1 |\n|            1.538 |       1 |\n|            1.501 |       1 |\n|            1.556 |       1 |\n|            1.555 |       1 |\n|            1.532 |       1 |\n|            1.576 |       1 |\n|            1.516 |       1 |\n|            1.571 |       1 |\n|            1.582 |       1 |\n|            1.624 |       1 |\n|            1.566 |       1 |\n|            1.512 |       1 |\n\nColumn: Healthy_life_expectancy (unique=11)\n|   Healthy_life_expectancy |   count |\n|--------------------------:|--------:|\n|                     0.986 |       4 |\n|                     0.999 |       3 |\n|                     1.052 |       2 |\n|                     1.028 |       2 |\n|                     1.036 |       2 |\n|                     1.029 |       2 |\n|                     0.996 |       1 |\n|                     1.026 |       1 |\n|                     1.025 |       1 |\n|                     0.979 |       1 |\n|                     0.903 |       1 |\n\nColumn: Freedom (unique=17)\n|   Freedom |   count |\n|----------:|--------:|\n|     0.566 |       2 |\n|     0.583 |       2 |\n|     0.592 |       2 |\n|     0.596 |       1 |\n|     0.542 |       1 |\n|     0.532 |       1 |\n|     0.558 |       1 |\n|     0.584 |       1 |\n|     0.523 |       1 |\n|     0.585 |       1 |\n|     0.526 |       1 |\n|     0.594 |       1 |\n|     0.603 |       1 |\n|     0.557 |       1 |\n|     0.591 |       1 |\n|     0.572 |       1 |\n|     0.458 |       1 |\n\nColumn: Region (unique=6)\n| Region                     |   count |\n|:---------------------------|--------:|\n| Western Europe             |      13 |\n| Australia and New Zealand  |       2 |\n| North America              |       2 |\n| Middle East                |       1 |\n| Latin America              |       1 |\n| Central and Eastern Europe |       1 |\nshape: (20, 7)\ncolumns: ['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n       Country  Happiness_Score  ...  Freedom                     Region\n0      Finland            7.842  ...    0.596             Western Europe\n1      Denmark            7.620  ...    0.592             Western Europe\n2  Switzerland            7.571  ...    0.572             Western Europe\n3      Iceland            7.554  ...    0.591             Western Europe\n4  Netherlands            7.464  ...    0.557             Western Europe\n5       Norway            7.392  ...    0.603             Western Europe\n6       Sweden            7.363  ...    0.594             Western Europe\n7   Luxembourg            7.324  ...    0.526             Western Europe\n8  New Zealand            7.277  ...    0.585  Australia and New Zealand\n9      Austria            7.246  ...    0.566             Western Europe\n\n[10 rows x 7 columns]\nregion_cols: ['Region']\n\nColumn: Region\n['Western Europe' 'Australia and New Zealand' 'Middle East'\n 'North America' 'Latin America' 'Central and Eastern Europe']\n\nTotal rows matching Western Europe in any region column: 13\n\nAnswer: There are 13 countries from Western Europe.\n\nThey are: Finland, Denmark, Switzerland, Iceland, Netherlands, Norway, Sweden, Luxembourg, Austria, Germany, Ireland, United Kingdom, Belgium.\n\n(Count determined from the dataset's \"Region\" column \u2014 let me know if you want a different regional definition or a downloadable list.)\n[2025-11-10T13:21:08.313494] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "13",
+            "framework_answer": "There are 13 countries from Western Europe.\n\nThey are: Finland, Denmark, Switzerland, Iceland, Netherlands, Norway, Sweden, Luxembourg, Austria, Germany, Ireland, United Kingdom, Belgium.\n\n(Count determined from the dataset's \"Region\" column \u2014 let me know if you want a different regional definition or a downloadable list.)",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.76,
+              "explanation": "The actual answer reports 13 Western Europe countries, which matches the expected count. It also lists 13 countries. Note: regional definitions can vary, but the numeric result aligns."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many countries are from Western Europe?\n\nExpected Answer: 13\nActual Answer: There are 13 countries from Western Europe.\n\nThey are: Finland, Denmark, Switzerland, Iceland, Netherlands, Norway, Sweden, Luxembourg, Austria, Germany, Ireland, United Kingdom, Belgium.\n\n(Count determined from the dataset's \"Region\" column \u2014 let me know if you want a different regional definition or a downloadable list.)\n\nReasoning: Count where Region='Western Europe': 13\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer reports 13 Western Europe countries, which matches the expected count. It also lists 13 countries. Note: regional definitions can vary, but the numeric result aligns.|0.76",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.76,
+                "explanation": "The actual answer reports 13 Western Europe countries, which matches the expected count. It also lists 13 countries. Note: regional definitions can vary, but the numeric result aligns."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many countries are from Western Europe?\"\"\"\nexpected_answer = \"\"\"13\"\"\"\nactual_answer = \"\"\"There are 13 countries from Western Europe.\n\nThey are: Finland, Denmark, Switzerland, Iceland, Netherlands, Norway, Sweden, Luxembourg, Austria, Germany, Ireland, United Kingdom, Belgium.\n\n(Count determined from the dataset's \"Region\" column \u2014 let me know if you want a different regional definition or a downloadable list.)\"\"\"\nreasoning = \"\"\"Count where Region='Western Europe': 13\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the highest GDP per capita?",
+      "benchmark": {
+        "question": "What is the highest GDP per capita?",
+        "answer": "1.944",
+        "reasoning": "Maximum GDP_per_capita: 1.944"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "1.944",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:21:27.822706] Starting PandasAI query\nQuestion: What is the highest GDP per capita?\nDataFrame shape: (20, 7)\n================================================================================\n\nAnswer: 1.944\n[2025-11-10T13:21:36.201617] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "1.944",
+            "framework_answer": "1.944",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest GDP per capita?\n\nExpected Answer: 1.944\nActual Answer: 1.944\n\nReasoning: Maximum GDP_per_capita: 1.944\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nexpected_answer = \"\"\"1.944\"\"\"\nactual_answer = \"\"\"1.944\"\"\"\nreasoning = \"\"\"Maximum GDP_per_capita: 1.944\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "1.944",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:21:36.202093] Starting Real Sketch query\nQuestion: What is the highest GDP per capita?\nDataFrame shape: (20, 7)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': '```\\n1.944\\n```'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: 1.944\n[2025-11-10T13:21:40.993369] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "1.944",
+            "framework_answer": "1.944",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest GDP per capita?\n\nExpected Answer: 1.944\nActual Answer: 1.944\n\nReasoning: Maximum GDP_per_capita: 1.944\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nexpected_answer = \"\"\"1.944\"\"\"\nactual_answer = \"\"\"1.944\"\"\"\nreasoning = \"\"\"Maximum GDP_per_capita: 1.944\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The highest GDP per capita is 1.944 (in column GDP_per_capita), for Luxembourg.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:21:40.994379] Starting LangChain query\nQuestion: What is the highest GDP per capita?\nDataFrame shape: (20, 7)\nColumns: ['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\n================================================================================\n\nAgent created, executing query...\n(20, 7)\n['Country', 'Happiness_Score', 'GDP_per_capita', 'Social_support', 'Healthy_life_expectancy', 'Freedom', 'Region']\ncandidates: ['GDP_per_capita']\n\nAnswer: The highest GDP per capita is 1.944 (in column GDP_per_capita), for Luxembourg.\n[2025-11-10T13:21:56.596837] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\nCountry,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "1.944",
+            "framework_answer": "The highest GDP per capita is 1.944 (in column GDP_per_capita), for Luxembourg.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The actual answer communicates the same numeric value (1.944) as the expected answer; it includes extra contextual details (Luxembourg, column name) but does not change the value."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the highest GDP per capita?\n\nExpected Answer: 1.944\nActual Answer: The highest GDP per capita is 1.944 (in column GDP_per_capita), for Luxembourg.\n\nReasoning: Maximum GDP_per_capita: 1.944\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The actual answer communicates the same numeric value (1.944) as the expected answer; it includes extra contextual details (Luxembourg, column name) but does not change the value.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The actual answer communicates the same numeric value (1.944) as the expected answer; it includes extra contextual details (Luxembourg, column name) but does not change the value."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the highest GDP per capita?\"\"\"\nexpected_answer = \"\"\"1.944\"\"\"\nactual_answer = \"\"\"The highest GDP per capita is 1.944 (in column GDP_per_capita), for Luxembourg.\"\"\"\nreasoning = \"\"\"Maximum GDP_per_capita: 1.944\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "Country,Happiness_Score,GDP_per_capita,Social_support,Healthy_life_expectancy,Freedom,Region\nFinland,7.842,1.892,1.587,0.986,0.596,Western Europe\nDenmark,7.62,1.868,1.573,0.996,0.592,Western Europe\nSwitzerland,7.571,1.847,1.566,1.052,0.572,Western Europe\nIceland,7.554,1.786,1.624,1.026,0.591,Western Europe\nNetherlands,7.464,1.825,1.548,0.999,0.557,Western Europe\nNorway,7.392,1.789,1.582,1.028,0.603,Western Europe\nSweden,7.363,1.83,1.571,1.025,0.594,Western Europe\nLuxembourg,7.324,1.944,1.516,1.052,0.526,Western Europe\nNew Zealand,7.277,1.696,1.576,1.028,0.585,Australia and New Zealand\nAustria,7.246,1.81,1.532,1.036,0.566,Western Europe\nAustralia,7.228,1.716,1.573,1.029,0.583,Australia and New Zealand\nIsrael,7.19,1.65,1.608,1.029,0.523,Middle East\nGermany,7.076,1.793,1.555,0.986,0.592,Western Europe\nCanada,7.025,1.706,1.556,1.036,0.584,North America\nIreland,6.977,1.885,1.548,0.999,0.566,Western Europe\nCosta Rica,6.93,1.434,1.501,0.999,0.558,Latin America\nUnited Kingdom,6.814,1.744,1.538,0.979,0.532,Western Europe\nCzech Republic,6.711,1.69,1.537,0.986,0.542,Central and Eastern Europe\nUnited States,6.892,1.82,1.48,0.903,0.458,North America\nBelgium,6.864,1.789,1.512,0.986,0.583,Western Europe\n"
+}

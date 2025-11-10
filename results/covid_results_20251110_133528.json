@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "dataset_name": "covid",
+    "timestamp": "20251110_133528",
+    "total_questions": 4,
+    "has_dataset": true
+  },
+  "results": [
+    {
+      "question": "What is the total number of COVID cases across all countries?",
+      "benchmark": {
+        "question": "What is the total number of COVID cases across all countries?",
+        "answer": "381000000",
+        "reasoning": "Sum of total_cases: 381000000"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "381000000",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:26:20.944114] Starting PandasAI query\nQuestion: What is the total number of COVID cases across all countries?\nDataFrame shape: (15, 8)\n================================================================================\n2025-11-10 13:26:20 [INFO] Question: What is the total number of COVID cases across all countries?\n2025-11-10 13:26:21 [INFO] Running PandasAI with litellm LLM...\n2025-11-10 13:26:21 [INFO] Prompt ID: d0069c6b-0c2c-4c6f-96a3-0acca42eeaef\n2025-11-10 13:26:21 [INFO] Generating new code...\n2025-11-10 13:26:21 [INFO] Using Prompt: <tables>\n\n<table dialect=\"duckdb\" table_name=\"table_deab611d2eea0a4480b5a6d3d5bb5c84\" columns=\"[{\"name\": \"country\", \"type\": \"string\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"total_cases\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"total_deaths\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"total_recovered\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"population\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"cases_per_million\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"deaths_per_million\", \"type\": \"integer\", \"description\": null, \"expression\": null, \"alias\": null}, {\"name\": \"recovery_rate\", \"type\": \"float\", \"description\": null, \"expression\": null, \"alias\": null}]\" dimensions=\"15x8\">\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\n</table>\n\n\n</tables>\n\nThe following functions have already been provided. Please use them as needed and do not redefine them.\n<function>\ndef execute_sql_query(sql_query: str) -> pd.DataFrame\n    \"\"\"This method connects to the database, executes the sql query and returns the dataframe\"\"\"\n</function>\n\n\n\nUpdate this initial code:\n```python\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\n\n# Declare result var: \ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n```\n\n\n\n### QUERY\n What is the total number of COVID cases across all countries?\n\nAt the end, declare \"result\" variable as a dictionary of type and value in the following format:\n\ntype (possible values \"string\", \"number\", \"dataframe\", \"plot\"). Examples: { \"type\": \"string\", \"value\": f\"The highest salary is {highest_salary}.\" } or { \"type\": \"number\", \"value\": 125 } or { \"type\": \"dataframe\", \"value\": pd.DataFrame({...}) } or { \"type\": \"plot\", \"value\": \"temp_chart.png\" }\n\n\n\nGenerate python code and return full updated code:\n\n### Note: Use only relevant table for query and do aggregation, sorting, joins and grouby through sql query\n2025-11-10 13:26:30 [INFO] Code Generated:\n# TODO: import the required dependencies\nimport pandas as pd\n\n# Write code here\nsql_query = \"\"\"\nSELECT SUM(total_cases) AS total_cases_sum\nFROM table_deab611d2eea0a4480b5a6d3d5bb5c84\n\"\"\"\ndf_sum = execute_sql_query(sql_query)\n\n# Extract the summed value\ntotal_cases_across_countries = int(df_sum.iloc[0][\"total_cases_sum\"]) if not df_sum.empty and df_sum.iloc[0][\"total_cases_sum\"] is not None else 0\n\n# Declare result var:\nresult = { \"type\": \"number\", \"value\": total_cases_across_countries }\n2025-11-10 13:26:30 [INFO] Validating code requirements...\n2025-11-10 13:26:30 [INFO] Code validation successful.\n2025-11-10 13:26:30 [INFO] Cleaning the generated code...\n2025-11-10 13:26:30 [INFO] Executing code: import pandas as pd\nsql_query = \"\"\"\nSELECT SUM(total_cases) AS total_cases_sum\nFROM table_deab611d2eea0a4480b5a6d3d5bb5c84\n\"\"\"\ndf_sum = execute_sql_query(sql_query)\ntotal_cases_across_countries = int(df_sum.iloc[0]['total_cases_sum']) if not df_sum.empty and df_sum.iloc[0]['total_cases_sum'] is not None else 0\nresult = {'type': 'number', 'value': total_cases_across_countries}\n2025-11-10 13:26:30 [INFO] Response generated successfully.\n\nAnswer: 381000000\n[2025-11-10T13:26:30.926865] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "381000000",
+            "framework_answer": "381000000",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total number of COVID cases across all countries?\n\nExpected Answer: 381000000\nActual Answer: 381000000\n\nReasoning: Sum of total_cases: 381000000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nexpected_answer = \"\"\"381000000\"\"\"\nactual_answer = \"\"\"381000000\"\"\"\nreasoning = \"\"\"Sum of total_cases: 381000000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\n\ndf['total_cases'] = pd.to_numeric(df['total_cases'], errors='coerce')   # if values are strings\ntotal_cases_all = df['total_cases'].sum()\nprint(total_cases_all)            # raw number\nprint(f\"{total_cases_all:,}\")     # formatted with commas\n\nThis will give the total number of COVID cases across all 15 countries.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:26:30.927232] Starting Real Sketch query\nQuestion: What is the total number of COVID cases across all countries?\nDataFrame shape: (15, 8)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\\n\\ndf[\\'total_cases\\'] = pd.to_numeric(df[\\'total_cases\\'], errors=\\'coerce\\')   # if values are strings\\ntotal_cases_all = df[\\'total_cases\\'].sum()\\nprint(total_cases_all)            # raw number\\nprint(f\"{total_cases_all:,}\")     # formatted with commas\\n\\nThis will give the total number of COVID cases across all 15 countries.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\n\ndf['total_cases'] = pd.to_numeric(df['total_cases'], errors='coerce')   # if values are strings\ntotal_cases_all = df['total_cases'].sum()\nprint(total_cases_all)            # raw number\nprint(f\"{total_cases_all:,}\")     # formatted with commas\n\nThis will give the total number of COVID cases across all 15 countries.\n[2025-11-10T13:26:44.529388] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "381000000",
+            "framework_answer": "I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\n\ndf['total_cases'] = pd.to_numeric(df['total_cases'], errors='coerce')   # if values are strings\ntotal_cases_all = df['total_cases'].sum()\nprint(total_cases_all)            # raw number\nprint(f\"{total_cases_all:,}\")     # formatted with commas\n\nThis will give the total number of COVID cases across all 15 countries.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.85,
+              "explanation": "The Actual Answer implies the total is 381000000 (same as Expected). Formatting and presentation differ (code vs direct value), but the semantic value matches."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total number of COVID cases across all countries?\n\nExpected Answer: 381000000\nActual Answer: I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\n\ndf['total_cases'] = pd.to_numeric(df['total_cases'], errors='coerce')   # if values are strings\ntotal_cases_all = df['total_cases'].sum()\nprint(total_cases_all)            # raw number\nprint(f\"{total_cases_all:,}\")     # formatted with commas\n\nThis will give the total number of COVID cases across all 15 countries.\n\nReasoning: Sum of total_cases: 381000000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The Actual Answer implies the total is 381000000 (same as Expected). Formatting and presentation differ (code vs direct value), but the semantic value matches.|0.85",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.85,
+                "explanation": "The Actual Answer implies the total is 381000000 (same as Expected). Formatting and presentation differ (code vs direct value), but the semantic value matches."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nexpected_answer = \"\"\"381000000\"\"\"\nactual_answer = \"\"\"I can\u2019t compute the exact total from the summary statistics alone \u2014 I need the full column values. Run this in Python on your dataframe to get the total:\n\ndf['total_cases'] = pd.to_numeric(df['total_cases'], errors='coerce')   # if values are strings\ntotal_cases_all = df['total_cases'].sum()\nprint(total_cases_all)            # raw number\nprint(f\"{total_cases_all:,}\")     # formatted with commas\n\nThis will give the total number of COVID cases across all 15 countries.\"\"\"\nreasoning = \"\"\"Sum of total_cases: 381000000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The total number of COVID cases across all countries is 381,000,000.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:26:44.530657] Starting LangChain query\nQuestion: What is the total number of COVID cases across all countries?\nDataFrame shape: (15, 8)\nColumns: ['country', 'total_cases', 'total_deaths', 'total_recovered', 'population', 'cases_per_million', 'deaths_per_million', 'recovery_rate']\n================================================================================\n\nAgent created, executing query...\n(15, 8)\nIndex(['country', 'total_cases', 'total_deaths', 'total_recovered',\n       'population', 'cases_per_million', 'deaths_per_million',\n       'recovery_rate'],\n      dtype='object')\ncountry                object\ntotal_cases             int64\ntotal_deaths            int64\ntotal_recovered         int64\npopulation              int64\ncases_per_million       int64\ndeaths_per_million      int64\nrecovery_rate         float64\ndtype: object\n  country  total_cases  ...  deaths_per_million  recovery_rate\n0     USA     95000000  ...                3172          96.84\n1   India     44000000  ...                 384          97.73\n2  Brazil     35000000  ...                3302          97.14\n3  Russia     20000000  ...                2603          95.00\n4      UK     24000000  ...                2985          95.83\n\n[5 rows x 8 columns]\ntotal_cases 381000000\n\nAnswer: The total number of COVID cases across all countries is 381,000,000.\n[2025-11-10T13:26:53.027514] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "381000000",
+            "framework_answer": "The total number of COVID cases across all countries is 381,000,000.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "The numeric value is identical (381,000,000 vs 381000000); formatting uses comma separators but semantically the same"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the total number of COVID cases across all countries?\n\nExpected Answer: 381000000\nActual Answer: The total number of COVID cases across all countries is 381,000,000.\n\nReasoning: Sum of total_cases: 381000000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The numeric value is identical (381,000,000 vs 381000000); formatting uses comma separators but semantically the same|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "The numeric value is identical (381,000,000 vs 381000000); formatting uses comma separators but semantically the same"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the total number of COVID cases across all countries?\"\"\"\nexpected_answer = \"\"\"381000000\"\"\"\nactual_answer = \"\"\"The total number of COVID cases across all countries is 381,000,000.\"\"\"\nreasoning = \"\"\"Sum of total_cases: 381000000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "Which country has the most COVID cases?",
+      "benchmark": {
+        "question": "Which country has the most COVID cases?",
+        "answer": "USA",
+        "reasoning": "Country with max total_cases: USA"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "Country with most COVID cases is USA with 95000000 cases.",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:33:10.419960] Starting PandasAI query\nQuestion: Which country has the most COVID cases?\nDataFrame shape: (15, 8)\n================================================================================\n\nAnswer: Country with most COVID cases is USA with 95000000 cases.\n[2025-11-10T13:33:21.638918] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "USA",
+            "framework_answer": "Country with most COVID cases is USA with 95000000 cases.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.85,
+              "explanation": "The Actual Answer correctly identifies USA as the country with the most COVID-19 cases; it adds a numeric figure but does not change the semantic claim. The presence of extra detail or formatting does not affect correctness."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the most COVID cases?\n\nExpected Answer: USA\nActual Answer: Country with most COVID cases is USA with 95000000 cases.\n\nReasoning: Country with max total_cases: USA\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The Actual Answer correctly identifies USA as the country with the most COVID-19 cases; it adds a numeric figure but does not change the semantic claim. The presence of extra detail or formatting does not affect correctness.|0.85",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.85,
+                "explanation": "The Actual Answer correctly identifies USA as the country with the most COVID-19 cases; it adds a numeric figure but does not change the semantic claim. The presence of extra detail or formatting does not affect correctness."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nexpected_answer = \"\"\"USA\"\"\"\nactual_answer = \"\"\"Country with most COVID cases is USA with 95000000 cases.\"\"\"\nreasoning = \"\"\"Country with max total_cases: USA\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "USA \u2014 95,000,000 total cases.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:33:21.639340] Starting Real Sketch query\nQuestion: Which country has the most COVID cases?\nDataFrame shape: (15, 8)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'USA \u2014 95,000,000 total cases.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: USA \u2014 95,000,000 total cases.\n[2025-11-10T13:33:25.336504] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "USA",
+            "framework_answer": "USA \u2014 95,000,000 total cases.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.88,
+              "explanation": "Both indicate USA as the country with the most total COVID-19 cases; the extra numeric detail (\"95,000,000 total cases\") does not change the identified country, only adds information. Formatting differences are minor."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the most COVID cases?\n\nExpected Answer: USA\nActual Answer: USA \u2014 95,000,000 total cases.\n\nReasoning: Country with max total_cases: USA\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both indicate USA as the country with the most total COVID-19 cases; the extra numeric detail (\"95,000,000 total cases\") does not change the identified country, only adds information. Formatting differences are minor.|0.88",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.88,
+                "explanation": "Both indicate USA as the country with the most total COVID-19 cases; the extra numeric detail (\"95,000,000 total cases\") does not change the identified country, only adds information. Formatting differences are minor."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nexpected_answer = \"\"\"USA\"\"\"\nactual_answer = \"\"\"USA \u2014 95,000,000 total cases.\"\"\"\nreasoning = \"\"\"Country with max total_cases: USA\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "Do you mean total (cumulative) confirmed COVID-19 cases, or current active cases?\n\nI don\u2019t have live internet access from this chat, so I can\u2019t fetch real\u2011time numbers. As of my last update (June 2024), the United States had the largest cumulative number of confirmed COVID-19 cases; India and Brazil have historically been the next largest. \n\nIf you want up\u2011to\u2011date figures I can:\n- Tell you where to look (Our World in Data, the WHO dashboard, or the Johns Hopkins Coronavirus Resource Center), or\n- If you provide a URL or paste the data here, I can analyse it and tell you which country currently has the most cases. Which would you prefer?",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:33:25.337774] Starting LangChain query\nQuestion: Which country has the most COVID cases?\nDataFrame shape: (15, 8)\nColumns: ['country', 'total_cases', 'total_deaths', 'total_recovered', 'population', 'cases_per_million', 'deaths_per_million', 'recovery_rate']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: Do you mean total (cumulative) confirmed COVID-19 cases, or current active cases?\n\nI don\u2019t have live internet access from this chat, so I can\u2019t fetch real\u2011time numbers. As of my last update (June 2024), the United States had the largest cumulative number of confirmed COVID-19 cases; India and Brazil have historically been the next largest. \n\nIf you want up\u2011to\u2011date figures I can:\n- Tell you where to look (Our World in Data, the WHO dashboard, or the Johns Hopkins Coronavirus Resource Center), or\n- If you provide a URL or paste the data here, I can analyse it and tell you which country currently has the most cases. Which would you prefer?\n[2025-11-10T13:33:35.195085] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "USA",
+            "framework_answer": "Do you mean total (cumulative) confirmed COVID-19 cases, or current active cases?\n\nI don\u2019t have live internet access from this chat, so I can\u2019t fetch real\u2011time numbers. As of my last update (June 2024), the United States had the largest cumulative number of confirmed COVID-19 cases; India and Brazil have historically been the next largest. \n\nIf you want up\u2011to\u2011date figures I can:\n- Tell you where to look (Our World in Data, the WHO dashboard, or the Johns Hopkins Coronavirus Resource Center), or\n- If you provide a URL or paste the data here, I can analyse it and tell you which country currently has the most cases. Which would you prefer?",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.85,
+              "explanation": "The Actual Answer states the United States (USA) has the largest cumulative COVID-19 cases, matching the Expected Answer. The wording uses \"United States\" instead of \"USA\" but refers to the same country; extra disclaimers and guidance do not change the correctness."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: Which country has the most COVID cases?\n\nExpected Answer: USA\nActual Answer: Do you mean total (cumulative) confirmed COVID-19 cases, or current active cases?\n\nI don\u2019t have live internet access from this chat, so I can\u2019t fetch real\u2011time numbers. As of my last update (June 2024), the United States had the largest cumulative number of confirmed COVID-19 cases; India and Brazil have historically been the next largest. \n\nIf you want up\u2011to\u2011date figures I can:\n- Tell you where to look (Our World in Data, the WHO dashboard, or the Johns Hopkins Coronavirus Resource Center), or\n- If you provide a URL or paste the data here, I can analyse it and tell you which country currently has the most cases. Which would you prefer?\n\nReasoning: Country with max total_cases: USA\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|The Actual Answer states the United States (USA) has the largest cumulative COVID-19 cases, matching the Expected Answer. The wording uses \"United States\" instead of \"USA\" but refers to the same country; extra disclaimers and guidance do not change the correctness.|0.85",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.85,
+                "explanation": "The Actual Answer states the United States (USA) has the largest cumulative COVID-19 cases, matching the Expected Answer. The wording uses \"United States\" instead of \"USA\" but refers to the same country; extra disclaimers and guidance do not change the correctness."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"Which country has the most COVID cases?\"\"\"\nexpected_answer = \"\"\"USA\"\"\"\nactual_answer = \"\"\"Do you mean total (cumulative) confirmed COVID-19 cases, or current active cases?\n\nI don\u2019t have live internet access from this chat, so I can\u2019t fetch real\u2011time numbers. As of my last update (June 2024), the United States had the largest cumulative number of confirmed COVID-19 cases; India and Brazil have historically been the next largest. \n\nIf you want up\u2011to\u2011date figures I can:\n- Tell you where to look (Our World in Data, the WHO dashboard, or the Johns Hopkins Coronavirus Resource Center), or\n- If you provide a URL or paste the data here, I can analyse it and tell you which country currently has the most cases. Which would you prefer?\"\"\"\nreasoning = \"\"\"Country with max total_cases: USA\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "What is the average recovery rate?",
+      "benchmark": {
+        "question": "What is the average recovery rate?",
+        "answer": "95.14",
+        "reasoning": "Mean of recovery_rate: 95.14"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "95.14",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:33:58.499508] Starting PandasAI query\nQuestion: What is the average recovery rate?\nDataFrame shape: (15, 8)\n================================================================================\n\nAnswer: 95.14\n[2025-11-10T13:34:08.463497] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "95.14",
+            "framework_answer": "95.14",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average recovery rate?\n\nExpected Answer: 95.14\nActual Answer: 95.14\n\nReasoning: Mean of recovery_rate: 95.14\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nexpected_answer = \"\"\"95.14\"\"\"\nactual_answer = \"\"\"95.14\"\"\"\nreasoning = \"\"\"Mean of recovery_rate: 95.14\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\n\ndf['recovery_rate'].mean()\n\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:34:08.464171] Starting Real Sketch query\nQuestion: What is the average recovery rate?\nDataFrame shape: (15, 8)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': \"I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\\n\\ndf['recovery_rate'].mean()\\n\\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.\"}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\n\ndf['recovery_rate'].mean()\n\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.\n[2025-11-10T13:34:20.404675] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "95.14",
+            "framework_answer": "I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\n\ndf['recovery_rate'].mean()\n\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.7,
+              "explanation": ""
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average recovery rate?\n\nExpected Answer: 95.14\nActual Answer: I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\n\ndf['recovery_rate'].mean()\n\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.\n\nReasoning: Mean of recovery_rate: 95.14\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.7,
+                "explanation": ""
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nexpected_answer = \"\"\"95.14\"\"\"\nactual_answer = \"\"\"I can't compute the exact mean from the summary alone (only min/quantiles and a few sample values are shown). To get the exact average recovery rate run:\n\ndf['recovery_rate'].mean()\n\nIf you want a quick estimate from the summary, the median is 96.0% so the mean is likely around 95\u201396% (\u224896.0%). If you paste the full recovery_rate column I can compute the precise average for you.\"\"\"\nreasoning = \"\"\"Mean of recovery_rate: 95.14\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "The average recovery rate is 95.14%.",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:34:20.405977] Starting LangChain query\nQuestion: What is the average recovery rate?\nDataFrame shape: (15, 8)\nColumns: ['country', 'total_cases', 'total_deaths', 'total_recovered', 'population', 'cases_per_million', 'deaths_per_million', 'recovery_rate']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: The average recovery rate is 95.14%.\n[2025-11-10T13:34:29.828571] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": true,
+            "numeric_match": false,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "95.14",
+            "framework_answer": "The average recovery rate is 95.14%.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Both answers represent the same value (95.14); the actual includes a percent sign and a sentence, but the numeric value matches the expected 95.14."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: What is the average recovery rate?\n\nExpected Answer: 95.14\nActual Answer: The average recovery rate is 95.14%.\n\nReasoning: Mean of recovery_rate: 95.14\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Both answers represent the same value (95.14); the actual includes a percent sign and a sentence, but the numeric value matches the expected 95.14.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Both answers represent the same value (95.14); the actual includes a percent sign and a sentence, but the numeric value matches the expected 95.14."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"What is the average recovery rate?\"\"\"\nexpected_answer = \"\"\"95.14\"\"\"\nactual_answer = \"\"\"The average recovery rate is 95.14%.\"\"\"\nreasoning = \"\"\"Mean of recovery_rate: 95.14\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    },
+    {
+      "question": "How many deaths were there in the USA?",
+      "benchmark": {
+        "question": "How many deaths were there in the USA?",
+        "answer": "1050000",
+        "reasoning": "total_deaths for USA: 1050000"
+      },
+      "framework_results": {
+        "PandasAI": {
+          "answer": "1050000",
+          "reasoning": "PandasAI processed the query and returned the result",
+          "error": "",
+          "logs": "[2025-11-10T13:34:49.076807] Starting PandasAI query\nQuestion: How many deaths were there in the USA?\nDataFrame shape: (15, 8)\n================================================================================\n\nAnswer: 1050000\n[2025-11-10T13:35:03.400622] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce PandasAI Query\"\"\"\nimport pandas as pd\nimport os\nfrom pandasai import Agent\nfrom pandasai_litellm.litellm import LiteLLM\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize PandasAI with LiteLLM\napi_key = os.getenv(\"OPENAI_API_KEY\")\nllm = LiteLLM(model=\"gpt-5-mini\", api_key=api_key)\n\n# Create agent and query\nagent = Agent(df, config={\"llm\": llm, \"verbose\": True, \"enable_cache\": False})\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nresponse = agent.chat(question)\n\nprint(f\"Answer: {response}\")\n",
+          "comparison": {
+            "exact_match": true,
+            "contains_match": true,
+            "numeric_match": true,
+            "rule_based_match": true,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "1050000",
+            "framework_answer": "1050000",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 1.0,
+              "explanation": "Exact match"
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many deaths were there in the USA?\n\nExpected Answer: 1050000\nActual Answer: 1050000\n\nReasoning: total_deaths for USA: 1050000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "Exact match (pre-LLM)",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 1.0,
+                "explanation": "Exact match"
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nexpected_answer = \"\"\"1050000\"\"\"\nactual_answer = \"\"\"1050000\"\"\"\nreasoning = \"\"\"total_deaths for USA: 1050000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "Sketch": {
+          "answer": "There were 1,050,000 total deaths in the USA.",
+          "reasoning": "Real Sketch library with gpt-5-mini via Chat API wrapper",
+          "error": "",
+          "logs": "[2025-11-10T13:35:03.401140] Starting Real Sketch query\nQuestion: How many deaths were there in the USA?\nDataFrame shape: (15, 8)\n================================================================================\n\nCalling df.sketch.ask()...\n\nRaw result: {'choices': [{'text': 'There were 1,050,000 total deaths in the USA.'}], 'model': 'gpt-5-mini', 'object': 'text_completion'}\n\nParsed answer: There were 1,050,000 total deaths in the USA.\n[2025-11-10T13:35:06.891993] Completed successfully",
+          "reproduction_code": "\"\"\"Reproduce Real Sketch Query\"\"\"\nimport pandas as pd\nimport os\nimport certifi\nimport ssl\nimport json\nfrom urllib import request\nfrom lambdaprompt import backends\n\n# Fix SSL certificate verification\nos.environ['SSLL_CERT_FILE'] = certifi.where()\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Create Chat API wrapper\nclass CompletionToChatWrapper(backends.OpenAICompletion):\n    def __init__(self, openai_api_key=None, **param_override):\n        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY')\n        self.param_override = param_override\n        self.param_override['model'] = 'gpt-5-mini'\n        self.param_override.pop('temperature', None)\n    \n    async def __call__(self, prompt, **kwargs):\n        messages = [{\"role\": \"user\", \"content\": prompt}]\n        payload = {\"model\": \"gpt-5-mini\", \"messages\": messages}\n        \n        url = \"https://api.openai.com/v1/chat/completions\"\n        headers = {\n            \"Authorization\": f\"Bearer {self.openai_api_key}\",\n            \"Content-Type\": \"application/json\"\n        }\n        \n        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')\n        ssl_context = ssl.create_default_context(cafile=certifi.where())\n        \n        with request.urlopen(req, context=ssl_context) as response:\n            result = json.loads(response.read().decode('utf-8'))\n        \n        return {\n            'choices': [{'text': result['choices'][0]['message']['content']}],\n            'model': 'gpt-5-mini',\n            'object': 'text_completion'\n        }\n\n# Replace backend and import sketch\nbackends.OpenAICompletion = CompletionToChatWrapper\nimport sketch\n\n# Query using sketch\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nresult = df.sketch.ask(question, call_display=False)\n\nprint(f\"Answer: {result}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": true,
+            "is_match": true,
+            "benchmark_answer": "1050000",
+            "framework_answer": "There were 1,050,000 total deaths in the USA.",
+            "llm_judge": {
+              "is_correct": true,
+              "confidence": 0.92,
+              "explanation": "Actual answer conveys 1,050,000 total deaths in the USA, which equals 1050000; formatting/wording differ but the numeric value matches exactly."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many deaths were there in the USA?\n\nExpected Answer: 1050000\nActual Answer: There were 1,050,000 total deaths in the USA.\n\nReasoning: total_deaths for USA: 1050000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "CORRECT|Actual answer conveys 1,050,000 total deaths in the USA, which equals 1050000; formatting/wording differ but the numeric value matches exactly.|0.92",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": true,
+                "confidence": 0.92,
+                "explanation": "Actual answer conveys 1,050,000 total deaths in the USA, which equals 1050000; formatting/wording differ but the numeric value matches exactly."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nexpected_answer = \"\"\"1050000\"\"\"\nactual_answer = \"\"\"There were 1,050,000 total deaths in the USA.\"\"\"\nreasoning = \"\"\"total_deaths for USA: 1050000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        },
+        "LangChain": {
+          "answer": "I\u2019m missing some details \u2014 can you clarify what you mean by \u201cdeaths in the USA\u201d? For example:\n\n- Do you mean total (all-cause) deaths, or deaths from a specific cause (COVID-19, heart disease, firearms, overdose, etc.)?  \n- For what time period? (a specific year, a range of years, \u201cso far this year\u201d, cumulative since a date)  \n- Are you asking about a particular dataset you uploaded here, or do you want official statistics (CDC, WHO, etc.)?\n\nTell me which of those you mean and I\u2019ll fetch or calculate the exact number (and can also show rates per 100,000, trends, or a chart if you want).",
+          "reasoning": "LangChain agent analyzed the dataframe using Python code execution",
+          "error": "",
+          "logs": "[2025-11-10T13:35:06.893281] Starting LangChain query\nQuestion: How many deaths were there in the USA?\nDataFrame shape: (15, 8)\nColumns: ['country', 'total_cases', 'total_deaths', 'total_recovered', 'population', 'cases_per_million', 'deaths_per_million', 'recovery_rate']\n================================================================================\n\nAgent created, executing query...\n\nAnswer: I\u2019m missing some details \u2014 can you clarify what you mean by \u201cdeaths in the USA\u201d? For example:\n\n- Do you mean total (all-cause) deaths, or deaths from a specific cause (COVID-19, heart disease, firearms, overdose, etc.)?  \n- For what time period? (a specific year, a range of years, \u201cso far this year\u201d, cumulative since a date)  \n- Are you asking about a particular dataset you uploaded here, or do you want official statistics (CDC, WHO, etc.)?\n\nTell me which of those you mean and I\u2019ll fetch or calculate the exact number (and can also show rates per 100,000, trends, or a chart if you want).\n[2025-11-10T13:35:15.448828] Completed successfully\n",
+          "reproduction_code": "\"\"\"Reproduce LangChain Pandas Agent Query\"\"\"\nimport pandas as pd\nimport os\nfrom langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent\nfrom langchain_openai import ChatOpenAI\n\n# Sample data (first 10 rows)\ndata_csv = \"\"\"\ncountry,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\n\"\"\"\n\ndf = pd.read_csv(pd.io.common.StringIO(data_csv))\n\n# Initialize LangChain\nos.environ['OPENAI_API_KEY'] = os.getenv(\"OPENAI_API_KEY\")\nllm = ChatOpenAI(temperature=0, model=\"gpt-3.5-turbo\")\n\n# Create pandas dataframe agent\nagent = create_pandas_dataframe_agent(\n    llm,\n    df,\n    verbose=True,\n    allow_dangerous_code=True,\n    handle_parsing_errors=True\n)\n\n# Execute query\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nresponse = agent.invoke({\"input\": question})\n\n# Extract answer\nif isinstance(response, dict):\n    answer = response.get('output', '')\nelse:\n    answer = str(response)\n\nprint(f\"Answer: {answer}\")\n",
+          "comparison": {
+            "exact_match": false,
+            "contains_match": false,
+            "numeric_match": false,
+            "rule_based_match": false,
+            "llm_judge_match": false,
+            "is_match": false,
+            "benchmark_answer": "1050000",
+            "framework_answer": "I\u2019m missing some details \u2014 can you clarify what you mean by \u201cdeaths in the USA\u201d? For example:\n\n- Do you mean total (all-cause) deaths, or deaths from a specific cause (COVID-19, heart disease, firearms, overdose, etc.)?  \n- For what time period? (a specific year, a range of years, \u201cso far this year\u201d, cumulative since a date)  \n- Are you asking about a particular dataset you uploaded here, or do you want official statistics (CDC, WHO, etc.)?\n\nTell me which of those you mean and I\u2019ll fetch or calculate the exact number (and can also show rates per 100,000, trends, or a chart if you want).",
+            "llm_judge": {
+              "is_correct": false,
+              "confidence": 0.78,
+              "explanation": "The Actual Answer does not provide the numeric total (1,050,000). It asks for clarifications on scope (cause, time period, dataset) rather than returning the expected value. The only 1,050,000 appears in a reasoning line, not in the delivered answer."
+            },
+            "llm_judge_log": {
+              "prompt": "Question: How many deaths were there in the USA?\n\nExpected Answer: 1050000\nActual Answer: I\u2019m missing some details \u2014 can you clarify what you mean by \u201cdeaths in the USA\u201d? For example:\n\n- Do you mean total (all-cause) deaths, or deaths from a specific cause (COVID-19, heart disease, firearms, overdose, etc.)?  \n- For what time period? (a specific year, a range of years, \u201cso far this year\u201d, cumulative since a date)  \n- Are you asking about a particular dataset you uploaded here, or do you want official statistics (CDC, WHO, etc.)?\n\nTell me which of those you mean and I\u2019ll fetch or calculate the exact number (and can also show rates per 100,000, trends, or a chart if you want).\n\nReasoning: total_deaths for USA: 1050000\n\nEvaluate if the Actual Answer is correct compared to the Expected Answer.\n\nConsider:\n- Numerical values may differ in precision (5.84 vs 5.843333)\n- Formatting differences (150 vs 150.0 vs \"150\")\n- Semantic equivalence (e.g., \"3 species\" vs \"3\")\n- Minor rounding differences\n- Different representations of the same value\n\nRespond ONLY with:\nCORRECT|<explanation>|<confidence 0.0-1.0>\nor\nINCORRECT|<explanation>|<confidence 0.0-1.0>\n\nExample: CORRECT|Both answers represent 150 rows, formatting differs|0.95\n",
+              "response": "INCORRECT|The Actual Answer does not provide the numeric total (1,050,000). It asks for clarifications on scope (cause, time period, dataset) rather than returning the expected value. The only 1,050,000 appears in a reasoning line, not in the delivered answer.|0.78",
+              "model": "gpt-5-nano",
+              "result": {
+                "is_correct": false,
+                "confidence": 0.78,
+                "explanation": "The Actual Answer does not provide the numeric total (1,050,000). It asks for clarifications on scope (cause, time period, dataset) rather than returning the expected value. The only 1,050,000 appears in a reasoning line, not in the delivered answer."
+              },
+              "reproduction_code": "\"\"\"Reproduce LLM Judge Evaluation\"\"\"\nimport os\nfrom openai import OpenAI\n\n# Initialize client (set OPENAI_API_KEY environment variable)\nclient = OpenAI(api_key=os.getenv(\"OPENAI_API_KEY\"))\n\n# Evaluation prompt\nquestion = \"\"\"How many deaths were there in the USA?\"\"\"\nexpected_answer = \"\"\"1050000\"\"\"\nactual_answer = \"\"\"I\u2019m missing some details \u2014 can you clarify what you mean by \u201cdeaths in the USA\u201d? For example:\n\n- Do you mean total (all-cause) deaths, or deaths from a specific cause (COVID-19, heart disease, firearms, overdose, etc.)?  \n- For what time period? (a specific year, a range of years, \u201cso far this year\u201d, cumulative since a date)  \n- Are you asking about a particular dataset you uploaded here, or do you want official statistics (CDC, WHO, etc.)?\n\nTell me which of those you mean and I\u2019ll fetch or calculate the exact number (and can also show rates per 100,000, trends, or a chart if you want).\"\"\"\nreasoning = \"\"\"total_deaths for USA: 1050000\"\"\"\n\nprompt = f\"\"\"Evaluate if the actual answer is correct for the given question.\n\nQuestion: {question}\nExpected Answer: {expected_answer}\nReasoning: {reasoning}\nActual Answer: {actual_answer}\n\nEvaluate if the actual answer is semantically equivalent to the expected answer.\nConsider:\n1. Different phrasings of the same answer\n2. Numerical values with minor formatting differences\n3. Answers embedded in longer explanations\n\nRespond in JSON format:\n{\n  \"is_correct\": true/false,\n  \"confidence\": 0.0-1.0,\n  \"explanation\": \"brief explanation\"\n}\n\"\"\"\n\nresponse = client.chat.completions.create(\n    model=\"gpt-5-nano\",\n    messages=[{\"role\": \"user\", \"content\": prompt}],\n    temperature=0.0,\n    max_completion_tokens=200\n)\n\nresult = response.choices[0].message.content\nprint(result)\n"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "dataset_csv": "country,total_cases,total_deaths,total_recovered,population,cases_per_million,deaths_per_million,recovery_rate\nUSA,95000000,1050000,92000000,331000000,287009,3172,96.84\nIndia,44000000,530000,43000000,1380000000,31884,384,97.73\nBrazil,35000000,700000,34000000,212000000,165094,3302,97.14\nRussia,20000000,380000,19000000,146000000,136986,2603,95.0\nUK,24000000,200000,23000000,67000000,358209,2985,95.83\nFrance,36000000,160000,35000000,65000000,553846,2462,97.22\nItaly,25000000,180000,24000000,60000000,416667,3000,96.0\nSpain,13000000,120000,12000000,47000000,276596,2553,92.31\nGermany,36000000,160000,35000000,83000000,433735,1928,97.22\nTurkey,16000000,100000,15000000,84000000,190476,1190,93.75\nArgentina,9600000,130000,9400000,45000000,213333,2889,97.92\nColombia,6200000,140000,6000000,51000000,121569,2745,96.77\nMexico,7400000,330000,6900000,128000000,57812,2578,93.24\nPoland,6300000,118000,5300000,38000000,165789,3105,84.13\nIran,7500000,145000,7200000,84000000,89286,1726,96.0\n"
+}

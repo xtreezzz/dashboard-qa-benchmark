@@ -67,7 +67,9 @@ dashboard-qa-benchmark/
 ├── Core Application
 │   ├── main.py                          # CLI benchmark runner
 │   ├── streamlit_app.py                 # Web dashboard (600+ lines)
-│   └── requirements.txt                 # Dependencies
+│   ├── requirements-benchmarks.txt      # CLI dependencies only
+│   ├── requirements-streamlit.txt       # Streamlit dashboard dependencies
+│   └── requirements.txt                 # Primary Streamlit dependency list
 │
 ├── Source Code
 │   ├── src/benchmark_datasets.py        # Dataset loaders + Q&A
@@ -294,8 +296,11 @@ Data export and statistics
 
 ### First Time Setup
 ```bash
-# 1. Install dependencies
+# 1. Install dependencies (Streamlit UI)
 pip install --user -r requirements.txt
+
+# CLI benchmarks only
+# pip install --user -r requirements-benchmarks.txt
 
 # 2. Set API key
 cp .env.example .env
