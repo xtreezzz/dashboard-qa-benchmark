@@ -87,13 +87,10 @@ Added a comprehensive Streamlit-based web dashboard for visualizing and analyzin
 
 ### 2025-11-10 — Streamlit Cloud installation fix
 
-- Relaxed hard pins on heavy scientific packages so Streamlit Cloud can install
-  pre-built wheels for Python 3.13.
-- Trimmed `requirements.txt` to the four libraries the dashboard actually
-  imports: Streamlit, pandas, Plotly, and python-dotenv.
-- Let pip resolve the newest compatible versions (Streamlit ≥ 1.39, pandas ≥ 2.2)
-  to avoid source builds that previously failed with `_PyLong_AsByteArray` errors
-  while compiling `pandas==2.1.4`.
+- Pinned `pandas>=2.2.3`, the first release that publishes Python 3.13 wheels,
+  so Streamlit Cloud no longer attempts to compile unsupported 2.1.x sources.
+- Kept the minimal Streamlit dependency list focused on the four libraries the
+  dashboard imports (Streamlit, pandas, Plotly, python-dotenv).
 
 ### Historical note
 

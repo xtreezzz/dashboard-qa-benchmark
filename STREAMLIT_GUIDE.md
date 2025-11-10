@@ -205,9 +205,9 @@ Dashboard reads from `results/` directory:
 ### Requirements
 
 ```
-streamlit==1.28.0
-plotly==5.18.0
-pandas>=2.1.0
+streamlit>=1.39
+plotly>=5.18
+pandas>=2.2.3
 ```
 
 Install: `pip install --user streamlit plotly`
@@ -231,8 +231,8 @@ streamlit_app.py
 trying to install `pandas==2.1.4`.
 
 **Solution:**
-1. Pull the latest repository version — `requirements.txt` now relaxes the
-   pandas pin so pip can download wheels compatible with Python 3.13.
+1. Pull the latest repository version — `requirements.txt` now requires
+   `pandas>=2.2.3`, the first release with official Python 3.13 wheels.
 2. Re-deploy or rerun `pip install -r requirements.txt`.
 3. If the cache still uses old pins, clear the environment (Streamlit Cloud:
    `Settings → Advanced settings → Clear cache`) and redeploy.
